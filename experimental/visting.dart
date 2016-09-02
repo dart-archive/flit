@@ -16,13 +16,13 @@
 import 'dart:async' show Future;
 
 import 'package:widgets/framework.dart' as flutter show Element, RenderElement;
-import 'package:widgets/bindings.dart' as flutterWidgetBinding
+import 'package:widgets/bindings.dart' as flutterWidgetBindings
     show WidgetBinding;
 
 List<Map<String, dynamic>> stack;
 
 flutter.Element tree =
-    flutterWidgetBinding.WidgetBinding.instance.renderViewElement;
+    flutterWidgetBindings.WidgetBinding.instance.renderViewElement;
 // the root of the element tree
 
 push(Map<String, dynamic> e) {
