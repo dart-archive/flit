@@ -15,14 +15,17 @@
 
 import 'dart:async' show Future;
 
-import 'package:widgets/framework.dart' as flutter show Element, RenderElement;
-import 'package:widgets/bindings.dart' as flutterWidgetBindings
-    show WidgetBinding;
+import 'package:flutter/widgets.dart' as flutter show Element, RenderObjectElement;
+
+import 'package:flutter/src/rendering/binding.dart' as flutterWidgetBindings
+    show RendererBinding;
+import 'package:flutter/src/widgets/binding.dart' as flutterWidgetBindings
+    show WidgetsBinding;
 
 List<Map<String, dynamic>> stack;
 
 flutter.Element tree =
-    flutterWidgetBindings.WidgetBinding.instance.renderViewElement;
+    flutterWidgetBindings.WidgetsBinding.instance.renderViewElement;
 // the root of the element tree
 
 push(Map<String, dynamic> e) {
@@ -49,7 +52,7 @@ Map<String, dynamic> mapElement(e) {
   return {
     'type': mapType(e.runtimeType),
     'widget': mapWidget(e.widget),
-    'isRenderElement': e is flutter.RenderElement,
+    'isRenderElement': e is flutter.RenderObjectElement,
     'renderObject': mapRenderObject(e.renderObject)
   };
 }
@@ -117,11 +120,13 @@ Future<Map<String, dynamic>> debugReturnRenderObjectTree() async {
 }
 
 main() {
-  registerServiceExtension('returnElementTree', debugReturnElementTree);
-  registerServiceExtension('returnWidgetTree', debugReturnWidgetTree);
+  flutterWidgetBindings.WidgetsBinding.instance.registerServiceExtension(
+      name: 'returnElementTree', callback: debugReturnElementTree);
+  flutterWidgetBindings.WidgetsBinding.instance.registerServiceExtension(
+      name: 'returnWidgetTree', callback: debugReturnWidgetTree);
   // to be added to WidgetBinding.initServiceExtensions
 
-  registerServiceExtension(
-      'returnRenderObjectTree', debugReturnRenderObjectTree);
+  flutterWidgetBindings.RendererBinding.instance.registerServiceExtension(
+      name: 'returnRenderObjectTree', callback: debugReturnRenderObjectTree);
   // to be added to RenderBinding.initServiceExtensions
 }
