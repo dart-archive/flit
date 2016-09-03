@@ -96,6 +96,8 @@ void renderObjectCollector(flutter.Element e) {
   pop;
 }
 
+// for next 3 functions - what is the formal
+// parameter for
 Future<Map<String, dynamic>> debugReturnElementTree(
     Map<String, String> parameters) async {
   stack = [
