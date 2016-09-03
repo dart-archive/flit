@@ -15,7 +15,8 @@
 
 import 'dart:async' show Future;
 
-import 'package:flutter/widgets.dart' as flutter show Element, RenderObjectElement;
+import 'package:flutter/widgets.dart' as flutter
+    show Element, RenderObjectElement;
 
 import 'package:flutter/src/rendering/binding.dart' as flutterWidgetBindings
     show RendererBinding;
@@ -95,7 +96,8 @@ void renderObjectCollector(flutter.Element e) {
   pop;
 }
 
-Future<Map<String, dynamic>> debugReturnElementTree() async {
+Future<Map<String, dynamic>> debugReturnElementTree(
+    Map<String, String> parameters) async {
   stack = [
     {'children': []}
   ];
@@ -103,7 +105,8 @@ Future<Map<String, dynamic>> debugReturnElementTree() async {
   return top;
 }
 
-Future<Map<String, dynamic>> debugReturnWidgetTree() async {
+Future<Map<String, dynamic>> debugReturnWidgetTree(
+    Map<String, String> parameters) async {
   stack = [
     {'children': []}
   ];
@@ -111,7 +114,8 @@ Future<Map<String, dynamic>> debugReturnWidgetTree() async {
   return top;
 }
 
-Future<Map<String, dynamic>> debugReturnRenderObjectTree() async {
+Future<Map<String, dynamic>> debugReturnRenderObjectTree(
+    Map<String, String> parameters) async {
   stack = [
     {'children': []}
   ];
