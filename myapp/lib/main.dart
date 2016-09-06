@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'visting.dart';
 
 List elems = [];
 BuildContext savedContext;
 
 void main() {
+  stack = [
+    {'children': []}
+  ];
   runApp(
     new MaterialApp(
       title: 'Flutter Demo',
@@ -15,6 +19,13 @@ void main() {
   );
 
   print(savedContext);
+}
+
+String banner() {
+  if (savedContext == null) {
+    return 'Button';
+  }
+  return top['children'].toString();
 }
 
 class FlutterDemo extends StatefulWidget {
@@ -35,13 +46,14 @@ class _FlutterDemoState extends State<FlutterDemo> {
   void _incrementCounter() {
     savedContext.visitChildElements(collectElements);
     setState(() {
-      _counter = elems.length;
+      _counter = _counter + 4;
     });
     elems = [];
   }
 
   void collectElements(Element e){
     elems.add(e);
+    mapElementTree(e);
     e.visitChildren(collectElements);
   }
 
@@ -56,7 +68,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
         title: new Text('Flutter Demo'),
       ),
       body: new Center(
-        child: new Text('Our Button tapped $_counter time${ _counter == 1 ? '' : 's' }.'),
+        child: new Text('Our ' + banner() +' tapped $_counter time${ _counter == 1 ? '' : 's' }.'),
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: _incrementCounter,

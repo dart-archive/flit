@@ -63,18 +63,18 @@ Map<String, dynamic> elementMap(flutter.Element e) {
 }
 
 Map<String, dynamic> widgetMap(flutter.Element e) {
-  return {'widget': mapElement(e), 'children': []};
+  return {'widget': mapWidget(e), 'children': []};
 }
 
 Map<String, dynamic> renderObjectMap(flutter.Element e) {
-  return {'renderObject': mapElement(e), 'children': []};
+  return {'renderObject': mapRenderObject(e), 'children': []};
 }
 
 String mapType(Type t) => t.toString();
 
 void elementCollector(flutter.Element e) {
   var map = elementMap(e);
-  top['children]'].add(map);
+  top['children'].add(map);
   push(map);
   e.visitChildren(elementCollector);
   pop;
