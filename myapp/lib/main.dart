@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'visting.dart';
 
-List elems = [];
 BuildContext savedContext;
 
 void main() {
@@ -14,9 +13,10 @@ void main() {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new FlutterDemo(),
+      home: new FlutterDemo(
     ),
-  );
+  )
+);
 
   print(savedContext);
 }
@@ -25,7 +25,7 @@ String banner() {
   if (savedContext == null) {
     return 'Button';
   }
-  return top['children'].toString();
+  return top()['children'].toString();
 }
 
 class FlutterDemo extends StatefulWidget {
@@ -38,23 +38,14 @@ class FlutterDemo extends StatefulWidget {
 class _FlutterDemoState extends State<FlutterDemo> {
   int _counter = 0;
 
-  void mapElementTree(Element e) {
-    mapElement(e);
-    e.visitChildren(mapElementTree);
-  }
-
   void _incrementCounter() {
-    savedContext.visitChildElements(collectElements);
+    stack = [
+      {'children': []}
+    ];
+    savedContext.visitChildElements(elementCollector);
     setState(() {
-      _counter = _counter + 4;
+      _counter = _counter + 1;
     });
-    elems = [];
-  }
-
-  void collectElements(Element e){
-    elems.add(e);
-    mapElementTree(e);
-    e.visitChildren(collectElements);
   }
 
   setSavedContext(c) {

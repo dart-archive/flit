@@ -2,10 +2,6 @@
  * the Flutter element/widget/render tree(s).
  * This stuff ultimately needs to go into
  *  the files rendering/bindings.dart and widgets/bindings.dart.
- *  What's missing now is an encoding of the actual Flutter objects
- *  collected  here into a JSONable form. These need to serialized into maps
- *  to whatever depth we find useful.  Observatory has expectations wrt to
- *  this - it expects a type field for example.
  *
  *  It may be possible to use the VM's facilities to provide "stable-ish"
  *  object ids that can be serialized, which could then be used to
@@ -24,11 +20,67 @@ import 'package:flutter/src/widgets/binding.dart' as flutterWidgetBindings
     show WidgetsBinding;
 
 
+List<Map<String, dynamic>> stack;
+
+flutter.Element tree =
+    flutterWidgetBindings.WidgetsBinding.instance.renderViewElement;
+// the root of the element tree
+
+push(Map<String, dynamic> e) {
+  stack.add(e);
+}
+
+Map<String, dynamic> pop() {
+  return stack.removeLast();
+}
+
+Map<String, dynamic> top() {
+  return stack.last;
+}
+
+String mapType(Type t) => t.toString();
+
+Map<String, dynamic> mapWidget(e) {
+  return {'type': mapType(e.runtimeType)};
+}
+
+Map<String, dynamic> mapRenderObject(e) {
+  return {'type': mapType(e.runtimeType)};
+}
+
+Map<String, dynamic> mapElement(e) {
+  return {
+    'type': mapType(e.runtimeType),
+    'widget': mapWidget(e.widget),
+    'isRenderElement': e is flutter.RenderObjectElement,
+    'renderObject': mapRenderObject(e.renderObject)
+  };
+}
+
+Map<String, dynamic> elementMap(flutter.Element e) {
+  return {'element': mapElement(e), 'children': []};
+}
+
+void elementCollector(flutter.Element e) {
+  var map = elementMap(e);
+  top()['children'].add(map);
+  push(map);
+  e.visitChildren(elementCollector);
+  pop();
+}
+
 // for next 3 functions - what is the formal
 // parameter for
+
+/* Allow Observatory to access
+ * the Flutter element tree.
+ *  The actual Flutter objects
+ *  collected  are serialized into maps
+ *  to whatever depth we find useful.  Observatory has expectations wrt to
+ *  this - it expects a type field for example.
+ */
 Future<Map<String, dynamic>> debugReturnElementTree(
     Map<String, String> parameters) async {
-
   List<Map<String, dynamic>> stack = [
     {'children': []}
   ];
@@ -80,12 +132,16 @@ Future<Map<String, dynamic>> debugReturnElementTree(
     pop();
   }
 
-
-
   tree.visitChildren(elementCollector);
   return top();
 }
 
+/* Allow Observatory to access
+ * the Flutter widget tree.
+ *  The actual Flutter objects
+ *  collected  are serialized into maps
+ *  to whatever depth we find useful.
+ */
 Future<Map<String, dynamic>> debugReturnWidgetTree(
     Map<String, String> parameters) async {
   List<Map<String, dynamic>> stack = [
@@ -130,9 +186,14 @@ Future<Map<String, dynamic>> debugReturnWidgetTree(
   return top();
 }
 
+/* Allow Observatory to access
+ * the Flutter render tree.
+ *  The actual Flutter objects
+ *  collected  are serialized into maps
+ *  to whatever depth we find useful.
+ */
 Future<Map<String, dynamic>> debugReturnRenderObjectTree(
     Map<String, String> parameters) async {
-
   List<Map<String, dynamic>> stack = [
     {'children': []}
   ];
@@ -171,13 +232,12 @@ Future<Map<String, dynamic>> debugReturnRenderObjectTree(
     pop();
   }
 
-
   tree.visitChildren(renderObjectCollector);
   return top();
 }
 
 main() {
-  flutterWidgetBindings.WidgetsBinding.instance.registerServiceExtension(
+/*  flutterWidgetBindings.WidgetsBinding.instance.registerServiceExtension(
       name: 'returnElementTree', callback: debugReturnElementTree);
   flutterWidgetBindings.WidgetsBinding.instance.registerServiceExtension(
       name: 'returnWidgetTree', callback: debugReturnWidgetTree);
@@ -186,4 +246,4 @@ main() {
   flutterWidgetBindings.RendererBinding.instance.registerServiceExtension(
       name: 'returnRenderObjectTree', callback: debugReturnRenderObjectTree);
   // to be added to RenderBinding.initServiceExtensions
-}
+*/}
