@@ -23,106 +23,157 @@ import 'package:flutter/src/rendering/binding.dart' as flutterWidgetBindings
 import 'package:flutter/src/widgets/binding.dart' as flutterWidgetBindings
     show WidgetsBinding;
 
-List<Map<String, dynamic>> stack;
-
-flutter.Element tree =
-    flutterWidgetBindings.WidgetsBinding.instance.renderViewElement;
-// the root of the element tree
-
-push(Map<String, dynamic> e) {
-  stack.add(e);
-}
-
-Map<String, dynamic> get pop {
-  return stack.removeLast();
-}
-
-Map<String, dynamic> get top {
-  return stack.last;
-}
-
-Map<String, dynamic> mapWidget(e) {
-  return {'type': mapType(e.runtimeType)};
-}
-
-Map<String, dynamic> mapRenderObject(e) {
-  return {'type': mapType(e.runtimeType)};
-}
-
-Map<String, dynamic> mapElement(e) {
-  return {
-    'type': mapType(e.runtimeType),
-    'widget': mapWidget(e.widget),
-    'isRenderElement': e is flutter.RenderObjectElement,
-    'renderObject': mapRenderObject(e.renderObject)
-  };
-}
-
-Map<String, dynamic> elementMap(flutter.Element e) {
-  return {'element': mapElement(e), 'children': []};
-}
-
-Map<String, dynamic> widgetMap(flutter.Element e) {
-  return {'widget': mapWidget(e), 'children': []};
-}
-
-Map<String, dynamic> renderObjectMap(flutter.Element e) {
-  return {'renderObject': mapRenderObject(e), 'children': []};
-}
-
-String mapType(Type t) => t.toString();
-
-void elementCollector(flutter.Element e) {
-  var map = elementMap(e);
-  top['children'].add(map);
-  push(map);
-  e.visitChildren(elementCollector);
-  pop;
-}
-
-void widgetCollector(flutter.Element e) {
-  var map = widgetMap(e);
-  top['children]'].add(map);
-  push(map);
-  e.visitChildren(widgetCollector);
-  pop;
-}
-
-void renderObjectCollector(flutter.Element e) {
-  var map = renderObjectMap(e);
-  top['children]'].add(map);
-  push(map);
-  e.visitChildren(renderObjectCollector);
-  pop;
-}
 
 // for next 3 functions - what is the formal
 // parameter for
 Future<Map<String, dynamic>> debugReturnElementTree(
     Map<String, String> parameters) async {
-  stack = [
+
+  List<Map<String, dynamic>> stack = [
     {'children': []}
   ];
+
+  flutter.Element tree =
+      flutterWidgetBindings.WidgetsBinding.instance.renderViewElement;
+// the root of the element tree
+
+  push(Map<String, dynamic> e) {
+    stack.add(e);
+  }
+
+  Map<String, dynamic> pop() {
+    return stack.removeLast();
+  }
+
+  Map<String, dynamic> top() {
+    return stack.last;
+  }
+
+  String mapType(Type t) => t.toString();
+
+  Map<String, dynamic> mapWidget(e) {
+    return {'type': mapType(e.runtimeType)};
+  }
+
+  Map<String, dynamic> mapRenderObject(e) {
+    return {'type': mapType(e.runtimeType)};
+  }
+
+  Map<String, dynamic> mapElement(e) {
+    return {
+      'type': mapType(e.runtimeType),
+      'widget': mapWidget(e.widget),
+      'isRenderElement': e is flutter.RenderObjectElement,
+      'renderObject': mapRenderObject(e.renderObject)
+    };
+  }
+
+  Map<String, dynamic> elementMap(flutter.Element e) {
+    return {'element': mapElement(e), 'children': []};
+  }
+
+  void elementCollector(flutter.Element e) {
+    var map = elementMap(e);
+    top()['children'].add(map);
+    push(map);
+    e.visitChildren(elementCollector);
+    pop();
+  }
+
+
+
   tree.visitChildren(elementCollector);
-  return top;
+  return top();
 }
 
 Future<Map<String, dynamic>> debugReturnWidgetTree(
     Map<String, String> parameters) async {
-  stack = [
+  List<Map<String, dynamic>> stack = [
     {'children': []}
   ];
+
+  flutter.Element tree =
+      flutterWidgetBindings.WidgetsBinding.instance.renderViewElement;
+// the root of the element tree
+
+  push(Map<String, dynamic> e) {
+    stack.add(e);
+  }
+
+  Map<String, dynamic> pop() {
+    return stack.removeLast();
+  }
+
+  Map<String, dynamic> top() {
+    return stack.last;
+  }
+
+  String mapType(Type t) => t.toString();
+
+  Map<String, dynamic> mapWidget(e) {
+    return {'type': mapType(e.runtimeType)};
+  }
+
+  Map<String, dynamic> widgetMap(flutter.Element e) {
+    return {'widget': mapWidget(e), 'children': []};
+  }
+
+  void widgetCollector(flutter.Element e) {
+    var map = widgetMap(e);
+    top()['children]'].add(map);
+    push(map);
+    e.visitChildren(widgetCollector);
+    pop();
+  }
+
   tree.visitChildren(widgetCollector);
-  return top;
+  return top();
 }
 
 Future<Map<String, dynamic>> debugReturnRenderObjectTree(
     Map<String, String> parameters) async {
-  stack = [
+
+  List<Map<String, dynamic>> stack = [
     {'children': []}
   ];
+
+  flutter.Element tree =
+      flutterWidgetBindings.WidgetsBinding.instance.renderViewElement;
+// the root of the element tree
+
+  push(Map<String, dynamic> e) {
+    stack.add(e);
+  }
+
+  Map<String, dynamic> pop() {
+    return stack.removeLast();
+  }
+
+  Map<String, dynamic> top() {
+    return stack.last;
+  }
+
+  String mapType(Type t) => t.toString();
+
+  Map<String, dynamic> mapRenderObject(e) {
+    return {'type': mapType(e.runtimeType)};
+  }
+
+  Map<String, dynamic> renderObjectMap(flutter.Element e) {
+    return {'renderObject': mapRenderObject(e), 'children': []};
+  }
+
+  void renderObjectCollector(flutter.Element e) {
+    var map = renderObjectMap(e);
+    top()['children]'].add(map);
+    push(map);
+    e.visitChildren(renderObjectCollector);
+    pop();
+  }
+
+
   tree.visitChildren(renderObjectCollector);
-  return top;
+  return top();
 }
 
 main() {
