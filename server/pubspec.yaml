@@ -1,0 +1,10 @@
+name: myapp
+description: A new flutter project.
+dependencies:
+  shelf: any
+  shelf_static: any
+  shelf_route: any
+  path: any
+
+  # flutter:
+    # path: ../../flutter/packages/flutter
