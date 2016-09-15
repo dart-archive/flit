@@ -63,7 +63,7 @@ class RunCommand extends RunCommandBase {
 
   RunCommand() {
 
-    Cache.flutterRoot = path.normalize(path.absolute(globalResults['flutter-root']));
+    Cache.flutterRoot = path.normalize(path.absolute('/Users/lukechurch/GitRepos/flutter'));
 
     // argParser.addFlag('full-restart',
         // defaultsTo: true,
@@ -201,7 +201,7 @@ class RunCommand extends RunCommandBase {
       runner = new HotRunner(
         deviceForCommand,
         target: targetFile,
-        debuggingOptions: options,
+        debuggingOptions: options
       );
     } else {
       runner = new RunAndStayResident(
