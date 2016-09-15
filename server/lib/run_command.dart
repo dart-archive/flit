@@ -22,20 +22,22 @@ import 'package:flutter_tools/src/commands/build_apk.dart';
 import 'package:flutter_tools/src/commands/install.dart';
 import 'package:flutter_tools/src/commands/trace.dart';
 
+import 'package:path/path.dart' as path;
+
 abstract class RunCommandBase extends FlutterCommand {
   RunCommandBase() {
     addBuildModeFlags(defaultToRelease: false);
-    argParser.addFlag('trace-startup',
-        negatable: true,
-        defaultsTo: false,
-        help: 'Start tracing during startup.');
-    argParser.addOption('route',
-        help: 'Which route to load when running the app.');
+    // argParser.addFlag('trace-startup',
+    //     negatable: true,
+    //     defaultsTo: false,
+    //     help: 'Start tracing during startup.');
+    // argParser.addOption('route',
+    //     help: 'Which route to load when running the app.');
     usesTargetOption();
   }
 
-  bool get traceStartup => argResults['trace-startup'];
-  String get route => argResults['route'];
+  bool get traceStartup => false; //argResults['trace-startup'];
+  // String get route => argResults['route'];
 }
 
 class RunCommand extends RunCommandBase {
@@ -53,7 +55,16 @@ class RunCommand extends RunCommandBase {
   bool hot_arg;
   String pidFile_arg;
 
+  // TODO: Make these options
+  String get targetFile => "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
+  String route  = "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
+
+  // TODO: GlobalResults is null, so the line below setting the root doesn't work.
+
   RunCommand() {
+
+    Cache.flutterRoot = path.normalize(path.absolute(globalResults['flutter-root']));
+
     // argParser.addFlag('full-restart',
         // defaultsTo: true,
         // help: 'Stop any currently running application process before running the app.');
@@ -106,6 +117,7 @@ class RunCommand extends RunCommandBase {
 
   @override
   bool get requiresDevice => true;
+
 
   @override
   String get usagePath {

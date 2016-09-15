@@ -7,7 +7,7 @@ import 'package:flutter_tools/src/base/logger.dart';
 // import 'package:flutter_tools/src/commands/run.dart';
 // import 'package:flutter_tools/src/commands/install.dart';
 
-import 'package:flutter_server/run_command.dart';
+import '../lib/run_command.dart';
 
 
 main(List<String> args) async {
@@ -27,6 +27,8 @@ main(List<String> args) async {
   print ("About to create Run");
 
   RunCommand runCmd = new RunCommand();
+  runCmd.run();
+
 
 
 // InstallCommand installCommand = new InstallCommand();
