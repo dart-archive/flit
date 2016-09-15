@@ -4,9 +4,10 @@ import 'package:flutter_tools/src/doctor.dart';
 import 'package:flutter_tools/src/base/context.dart';
 import 'package:flutter_tools/src/base/logger.dart';
 
-import 'package:flutter_tools/src/commands/run.dart';
-import 'package:flutter_tools/src/commands/install.dart';
+// import 'package:flutter_tools/src/commands/run.dart';
+// import 'package:flutter_tools/src/commands/install.dart';
 
+import 'package:flutter_server/run_command.dart';
 
 
 main(List<String> args) async {
@@ -25,11 +26,15 @@ main(List<String> args) async {
 
   print ("About to create Run");
 
+  RunCommand runCmd = new RunCommand();
+
 
 // InstallCommand installCommand = new InstallCommand();
 // installCommand.run();
-
-  RunCommand runCommand = new RunCommand();
-  runCommand.run();
+  //
+  // RunCommand runCommand = new RunCommand();
+  // runCommand.argResults = new
+  // runCommand.argResults['hot'] = true;
+  // runCommand.run();
 
 }
