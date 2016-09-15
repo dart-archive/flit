@@ -55,6 +55,9 @@ class RunCommand extends RunCommandBase {
   bool hot_arg;
   String pidFile_arg;
 
+  var buildMode = BuildMode.debug;
+
+
   // TODO: Make these options
   String get targetFile => "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
   String route  = "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
@@ -157,19 +160,20 @@ class RunCommand extends RunCommandBase {
     //   }
     // }
 
-    if (deviceForCommand.isLocalEmulator && !isEmulatorBuildMode(getBuildMode())) {
-      printError('${toTitleCase(getModeName(getBuildMode()))} mode is not supported for emulators.');
+    if (deviceForCommand.isLocalEmulator && !isEmulatorBuildMode(buildMode)) {
+      printError('${toTitleCase(getModeName(buildMode))} mode is not supported for emulators.');
       return 1;
     }
 
     DebuggingOptions options;
 
-    if (getBuildMode() == BuildMode.release) {
-      options = new DebuggingOptions.disabled(getBuildMode());
+
+    if (buildMode == BuildMode.release) {
+      options = new DebuggingOptions.disabled(buildMode);
     } else {
       options = new DebuggingOptions.enabled(
-        getBuildMode(),
-        startPaused: argResults['start-paused'],
+        buildMode,
+        startPaused: startPaused_arg,
         observatoryPort: debugPort
       );
     }
@@ -180,7 +184,7 @@ class RunCommand extends RunCommandBase {
     bool hotMode = hot_arg;
 
     if (hotMode) {
-      if (getBuildMode() != BuildMode.debug) {
+      if (buildMode != BuildMode.debug) {
         printError('Hot mode only works with debug builds.');
         return 1;
       }
