@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+import 'package:flutter_tools/src/android/android_sdk.dart';
 import 'package:flutter_tools/src/device.dart';
 import 'package:flutter_tools/src/doctor.dart';
 import 'package:flutter_tools/src/base/context.dart';
@@ -16,6 +17,9 @@ main(List<String> args) async {
   context[Logger] = new StdoutLogger();
   context[DeviceManager] = new DeviceManager();
   Doctor.initGlobal();
+
+
+  context[AndroidSdk] = AndroidSdk.locateAndroidSdk();
 
   // DeviceManager dm = context[DeviceManager];
   // var devices = await dm.getDevices();
