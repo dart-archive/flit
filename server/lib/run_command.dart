@@ -24,6 +24,10 @@ import 'package:flutter_tools/src/commands/trace.dart';
 
 import 'package:path/path.dart' as path;
 
+int observatoryPort;
+
+
+
 abstract class RunCommandBase extends FlutterCommand {
   RunCommandBase() {
     addBuildModeFlags(defaultToRelease: false);
@@ -60,12 +64,9 @@ class RunCommand extends RunCommandBase {
 
   // TODO: Make these options
   String get targetFile => "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
-  String route  = "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
-
-  // TODO: GlobalResults is null, so the line below setting the root doesn't work.
+  String route  = "/";
 
   RunCommand() {
-
     Cache.flutterRoot = path.normalize(path.absolute('/Users/lukechurch/GitRepos/flutter'));
 
     // argParser.addFlag('full-restart',
@@ -121,16 +122,12 @@ class RunCommand extends RunCommandBase {
   @override
   bool get requiresDevice => true;
 
-
   @override
   String get usagePath {
     Device device = deviceForCommand;
-
     String command = hot_arg ? 'hotrun' : name;
-
     if (device == null)
       return command;
-
     // Return 'run/ios'.
     return '$command/${getNameForTargetPlatform(device.platform)}';
   }
@@ -217,6 +214,9 @@ class RunCommand extends RunCommandBase {
         applicationBinary: null //argResults['use-application-binary']
       );
     }
+
+    print ("Calling runner with route: $route");
+    print ("Runner type: ${runner.runtimeType}");
 
     return runner.run(route: route, shouldBuild: build_arg);
   }
@@ -306,6 +306,9 @@ Future<int> startApp(
 
   stopwatch.stop();
 
+  observatoryPort = result.observatoryPort;
+
+
   if (!result.started) {
     printError('Error running application on ${device.name}.');
   } else if (traceStartup) {
@@ -317,9 +320,6 @@ Future<int> startApp(
       return 1;
     }
   }
-
-  if (benchmark)
-    writeRunBenchmarkFile(stopwatch);
 
   return result.started ? 0 : 2;
 }
