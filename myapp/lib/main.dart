@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tools/src/device.dart';
-import 'package:flutter_tools/src/android/android_device.dart';
-import 'package:flutter_tools/src/hot.dart';
-import 'package:flutter_tools/src/application_package.dart';
-
 import 'visting.dart';
 
 BuildContext savedContext;
@@ -59,20 +54,28 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
   @override
   Widget build(BuildContext context) {
-    var tree = new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Flutter Demo'),
-      ),
-      body: new Center(
-        child: new Text('Our ' + banner() +' tapped $_counter time${ _counter == 1 ? '' : 's' }.'),
-      ),
-      floatingActionButton: new FloatingActionButton(
+    var tree = e(new Scaffold(
+      appBar: e(new AppBar(
+        title: e(new Text('Flutter Demo')),
+
+      )),
+      body: e(new Center(
+        child: e(new Text('Our ' + banner() +' tapped $_counter time${ _counter == 1 ? '' : 's' }.')),
+
+      )),
+      floatingActionButton: e(new FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: new Icon(Icons.add),
-      ),
-    );
+      )),
+    ));
     setSavedContext(context);
     return tree;
   }
+}
+
+
+dynamic e(dynamic d) {
+  print (StackTrace.current);
+  return d;
 }
