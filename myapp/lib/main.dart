@@ -66,7 +66,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
       floatingActionButton: e(new FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: new Icon(Icons.add),
+        child: e(new Icon(Icons.add)),
       )),
     ));
     setSavedContext(context);
