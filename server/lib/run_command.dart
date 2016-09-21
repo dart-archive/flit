@@ -50,11 +50,12 @@ class RunCommand extends RunCommandBase {
 
 
   // TODO: Make these options
-  String get targetFile => "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
+
+  String get targetFile => "/Users/gbracha/flit/myapp/lib/main.dart";
   String route  = "/";
 
   RunCommand() {
-    Cache.flutterRoot = path.normalize(path.absolute('/Users/lukechurch/GitRepos/flutter'));
+   Cache.flutterRoot = path.normalize(path.absolute('/Users/gbracha/flutter'));
     fullRestart_arg = true;
     startPaused_arg = false;
     debugPort_arg = kDefaultObservatoryPort;
