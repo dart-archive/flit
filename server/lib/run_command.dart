@@ -16,6 +16,7 @@ import 'package:flutter_tools/src/resident_runner.dart';
 // import 'package:flutter_tools/src/run.dart';
 import 'run.dart';
 import 'package:flutter_tools/src/runner/flutter_command.dart';
+import 'package:flutter_tools/src/vmservice.dart';
 
 import 'package:path/path.dart' as path;
 
@@ -47,7 +48,9 @@ class RunCommand extends RunCommandBase {
   String pidFile_arg;
 
   var buildMode = BuildMode.debug;
-
+  
+  VMService vmService;
+  Isolate isolateId;
 
   // TODO: Make these options
 
@@ -134,6 +137,8 @@ class RunCommand extends RunCommandBase {
     print ("Calling runner with route: $route");
     print ("Runner type: ${runner.runtimeType}");
 
+    vmService = runner.vmService;
+    isolateId = runner.currentView.uiIsolate;
     return runner.run(route: route, shouldBuild: build_arg);
   }
 }
