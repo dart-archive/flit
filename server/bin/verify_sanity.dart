@@ -32,9 +32,9 @@ main(List<String> args) async {
 
   RunCommand runCmd = new RunCommand();
   runCmd.run();
-
-  print(runCmd.vmService.flutterDebugReturnElementTree(runCmd.isolateId));
-
+  print('ElementTree');
+  print(runCmd.uiIsolate.flutterDebugReturnElementTree());
+  print('done');
 
 
 // InstallCommand installCommand = new InstallCommand();

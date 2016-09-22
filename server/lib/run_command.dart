@@ -48,9 +48,9 @@ class RunCommand extends RunCommandBase {
   String pidFile_arg;
 
   var buildMode = BuildMode.debug;
-  
+
   VMService vmService;
-  Isolate isolateId;
+  Isolate uiIsolate;
 
   // TODO: Make these options
 
@@ -138,7 +138,7 @@ class RunCommand extends RunCommandBase {
     print ("Runner type: ${runner.runtimeType}");
 
     vmService = runner.vmService;
-    isolateId = runner.currentView.uiIsolate;
+    uiIsolate = runner.currentView.uiIsolate;
     return runner.run(route: route, shouldBuild: build_arg);
   }
 }
