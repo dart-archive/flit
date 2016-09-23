@@ -64,7 +64,6 @@ dynamic _listDevices(shelf.Request request) async {
   return "$devices";
 }
 
-
 dynamic _run(shelf.Request request) async {
   DeviceManager dm = context[DeviceManager];
   var devices = await dm.getDevices();

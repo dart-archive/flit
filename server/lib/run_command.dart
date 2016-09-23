@@ -16,6 +16,7 @@ import 'package:flutter_tools/src/resident_runner.dart';
 // import 'package:flutter_tools/src/run.dart';
 import 'run.dart';
 import 'package:flutter_tools/src/runner/flutter_command.dart';
+import 'package:flutter_tools/src/vmservice.dart';
 
 import 'package:path/path.dart' as path;
 
@@ -48,13 +49,16 @@ class RunCommand extends RunCommandBase {
 
   var buildMode = BuildMode.debug;
 
+  VMService vmService;
+  Isolate uiIsolate;
 
   // TODO: Make these options
-  String get targetFile => "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
+
+  String get targetFile => "/Users/gbracha/flit/myapp/lib/main.dart";
   String route  = "/";
 
   RunCommand() {
-    Cache.flutterRoot = path.normalize(path.absolute('/Users/lukechurch/GitRepos/flutter'));
+   Cache.flutterRoot = path.normalize(path.absolute('/Users/gbracha/flutter'));
     fullRestart_arg = true;
     startPaused_arg = false;
     debugPort_arg = kDefaultObservatoryPort;
@@ -133,6 +137,8 @@ class RunCommand extends RunCommandBase {
     print ("Calling runner with route: $route");
     print ("Runner type: ${runner.runtimeType}");
 
+    vmService = runner.vmService;
+    uiIsolate = runner.currentView.uiIsolate;
     return runner.run(route: route, shouldBuild: build_arg);
   }
 }
