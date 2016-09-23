@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'visting.dart';
+import 'diagnostics.dart';
 
 BuildContext savedContext;
 
@@ -54,28 +55,53 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
   @override
   Widget build(BuildContext context) {
-    var tree = e(new Scaffold(
-      appBar: e(new AppBar(
-        title: e(new Text('Flutter Demo')),
+    var tree = h(0, new Scaffold(
+      appBar: h(1, new AppBar(
+        title: h(2, new Text('Flutter Demo')),
 
       )),
-      body: e(new Center(
-        child: e(new Text('Our ' + banner() +' tapped $_counter time${ _counter == 1 ? '' : 's' }.')),
+      body: h(3, new Center(
+        child: h(4, new Text('Our ' + banner() +' tapped $_counter time${ _counter == 1 ? '' : 's' }.')),
 
       )),
-      floatingActionButton: e(new FloatingActionButton(
+      floatingActionButton: h(5, new FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: new Icon(Icons.add),
+        child: h(6, new Icon(Icons.add)),
       )),
     ));
     setSavedContext(context);
+
     return tree;
   }
 }
 
-
-dynamic e(dynamic d) {
-  print (StackTrace.current);
-  return d;
+Widget h(id, Widget w) {
+  if (!highlightIds.contains(id)) return w;
+  return new CustomPaint(child: w, foregroundPainter: new HighlightPainter());
 }
+
+class HighlightPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = new Paint()
+      ..color = Colors.red[500].withOpacity(0.40)
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 5.0;
+    canvas.drawRRect(
+        new RRect.fromRectAndCorners(
+          new Rect.fromLTWH(-5.0, -5.0, size.width + 10.0, size.height + 10.0),
+          topLeft: new Radius.circular(2.0),
+          topRight: new Radius.circular(2.0),
+          bottomLeft: new Radius.circular(2.0),
+          bottomRight: new Radius.circular(2.0)
+        ), paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+List<int> highlightIds = [4];
