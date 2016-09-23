@@ -14,7 +14,7 @@ import 'package:flutter_tools/src/globals.dart';
 import 'package:flutter_tools/src/hot.dart';
 import 'package:flutter_tools/src/resident_runner.dart';
 // import 'package:flutter_tools/src/run.dart';
-import 'run.dart';
+import 'package:flutter_tools/src/run.dart';
 import 'package:flutter_tools/src/runner/flutter_command.dart';
 import 'package:flutter_tools/src/vmservice.dart';
 
@@ -50,7 +50,6 @@ class RunCommand extends RunCommandBase {
   var buildMode = BuildMode.debug;
 
   VMService vmService;
-  Isolate uiIsolate;
 
   // TODO: Make these options
 
@@ -138,7 +137,7 @@ class RunCommand extends RunCommandBase {
     print ("Runner type: ${runner.runtimeType}");
 
     vmService = runner.vmService;
-    uiIsolate = runner.currentView.uiIsolate;
     return runner.run(route: route, shouldBuild: build_arg);
+    return  result;
   }
 }

@@ -31,9 +31,12 @@ main(List<String> args) async {
   print ("About to create Run");
 
   RunCommand runCmd = new RunCommand();
-  runCmd.run();
+  await runCmd.run();
   print('ElementTree');
-  print(runCmd.uiIsolate.flutterDebugReturnElementTree());
+  print('VM service = ' + runCmd.vmService.toString());
+
+  print('isolate = ' + runCmd.vmService.vm.mainView.uiIsolate.toString());
+  //print(runCmd.vmService.vm.mainView.uiIsolate.flutterDebugReturnElementTree());
   print('done');
 
 
