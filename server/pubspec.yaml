@@ -6,7 +6,7 @@ dependencies:
   shelf_route: any
   path: any
   flutter_tools:
-    path: /Users/lukechurch/GitRepos/flutter/packages/flutter_tools
+    path: ../../flutter/packages/flutter_tools
 
   # flutter:
     # path: ../../flutter/packages/flutter
