@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
 
-/*import 'package:flutter_tools/src/context.dart';
-import 'package:flutter_tools/src/device.dart';
-import 'package:flutter_tools/src/commands.dart';
-import 'package:flutter_tools/src/android/android_device.dart';
-import 'package:flutter_tools/src/hot.dart';
-import 'package:flutter_tools/src/application_package.dart';
-*/
-
 import 'visting.dart';
 import 'diagnostics.dart';
 
@@ -84,33 +76,3 @@ class _FlutterDemoState extends State<FlutterDemo> {
     return tree;
   }
 }
-
-Widget h(id, Widget w) {
-  if (!highlightIds.contains(id)) return w;
-  return new CustomPaint(child: w, foregroundPainter: new HighlightPainter());
-}
-
-class HighlightPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = new Paint()
-      ..color = Colors.red[500].withOpacity(0.40)
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 5.0;
-    canvas.drawRRect(
-        new RRect.fromRectAndCorners(
-          new Rect.fromLTWH(-5.0, -5.0, size.width + 10.0, size.height + 10.0),
-          topLeft: new Radius.circular(2.0),
-          topRight: new Radius.circular(2.0),
-          bottomLeft: new Radius.circular(2.0),
-          bottomRight: new Radius.circular(2.0)
-        ), paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-}
-
-List<int> highlightIds = [4];
