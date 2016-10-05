@@ -1,3 +1,3 @@
 # flit
 
-Placeholder repo for Flit until whilst we work out project status
+Experimental tool for understanding tweaking Flutter apps
