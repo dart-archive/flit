@@ -22,18 +22,13 @@ main(List<String> args) async {
   Doctor.initGlobal();
   context[AndroidSdk] = AndroidSdk.locateAndroidSdk();
 
-  // DeviceManager dm = context[DeviceManager];
-  // var devices = await dm.getDevices();
-
-  // print(devices);
-
-  // print ("Devices enum complete");
+  String flutterPath = '/Users/lukechurch/GitRepos/flutter';
+  String appMain = "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
+  String diagPath = "/Users/lukechurch/GitRepos/flit/myapp/lib/diagnostics.dart";
 
   print ("About to create Run");
 
-  RunCommand runCmd = new RunCommand(
-    '/Users/lukechurch/GitRepos/flutter',
-    "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart");
+  RunCommand runCmd = new RunCommand(flutterPath, appMain);
 
   runCmd.verifyThenRunCommand();
   HotRunner hotRunner;
@@ -49,28 +44,17 @@ main(List<String> args) async {
     print('VM service = ${hotRunner.vmService}');
   }
 
+
   print ("===========================================");
   print ("TODO: Something more sensible than this");
   print ("done waiting app should have started by now");
   print ("===========================================");
 
-  while (true) {
-    print ("attempting restart");
-    await hotRunner.restart(fullRestart: true);
-    print ("Restart complete");
-    await new Future.delayed(new Duration(seconds: 5));
-  }
-
-  // print('isolate = ' + runCmd.vmService.vm.mainView.uiIsolate.toString());
-  //print(runCmd.vmService.vm.mainView.uiIsolate.flutterDebugReturnElementTree());
-
-
-// InstallCommand installCommand = new InstallCommand();
-// installCommand.run();
-  //
-  // RunCommand runCommand = new RunCommand();
-  // runCommand.argResults = new
-  // runCommand.argResults['hot'] = true;
-  // runCommand.run();
-
+  new io.File(diagPath)
+    .watch().listen((_) async {
+      print ("attempting restart");
+      await hotRunner.restart(fullRestart: true);
+      print ("Restart complete");
+      await new Future.delayed(new Duration(seconds: 5));
+    });
 }
