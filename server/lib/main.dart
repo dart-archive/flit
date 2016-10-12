@@ -12,6 +12,9 @@ import 'package:flutter_tools/src/doctor.dart';
 import 'package:flutter_tools/src/base/context.dart';
 import 'package:flutter_tools/src/base/logger.dart';
 
+import 'package:flutter_tools/src/vmservice.dart';
+
+
 String basePath;
 
 main(List<String> args) async {

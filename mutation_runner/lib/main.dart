@@ -22,14 +22,15 @@ main(List<String> args) async {
   Doctor.initGlobal();
   context[AndroidSdk] = AndroidSdk.locateAndroidSdk();
 
-  String flutterPath = '/Users/lukechurch/GitRepos/flutter';
-  String appMain = "/Users/lukechurch/GitRepos/flit/myapp/lib/main.dart";
-  String diagPath = "/Users/lukechurch/GitRepos/flit/myapp/lib/diagnostics.dart";
+  String flutterPath = '~/GitRepos/flutter';
+  String appMain = "~/GitRepos/flit/myapp/lib/main.dart";
+  String diagPath = "~/GitRepos/flit/myapp/lib/diagnostics.dart";
 
   print ("About to create Run");
 
   RunCommand runCmd = new RunCommand(flutterPath, appMain);
 
+  print('created RunCommand');
   runCmd.verifyThenRunCommand();
   HotRunner hotRunner;
 

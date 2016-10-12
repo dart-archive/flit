@@ -146,7 +146,7 @@ class RunCommand extends RunCommandBase {
       }
       ResidentRunner runner;
 
-      if (hotMode) {
+      //if (hotMode) {
         runner = new HotRunner(
           device,
           target: targetFile,
@@ -155,7 +155,8 @@ class RunCommand extends RunCommandBase {
         );
 
         hotRunner = runner;
-      } else {
+        vmService = runner.vmService;
+      /*} else {
         runner = new RunAndStayResident(
           device,
           target: targetFile,
@@ -164,7 +165,7 @@ class RunCommand extends RunCommandBase {
           benchmark: argsMap['benchmark'],
           applicationBinary: argsMap['use-application-binary']
         );
-      }
+      }*/
 
       return runner.run(route: route, shouldBuild: argsMap['build']);
     }
