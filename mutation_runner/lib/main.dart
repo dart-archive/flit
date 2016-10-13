@@ -23,8 +23,8 @@ main(List<String> args) async {
   context[AndroidSdk] = AndroidSdk.locateAndroidSdk();
 
   String flutterPath = '~/GitRepos/flutter';
-  String appMain = "~/GitRepos/flit/myapp/lib/main.dart";
-  String diagPath = "~/GitRepos/flit/myapp/lib/diagnostics.dart";
+  String appMain = "../myapp/lib/main.dart";
+  String diagPath = "../myapp/lib/diagnostics.dart";
 
   print ("About to create Run");
 
@@ -32,6 +32,9 @@ main(List<String> args) async {
 
   print('created RunCommand');
   runCmd.verifyThenRunCommand();
+
+  print('verified RunCommand');
+
   HotRunner hotRunner;
 
   for (int i = 0; i < 20; i++) {

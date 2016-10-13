@@ -88,6 +88,7 @@ class RunCommand extends RunCommandBase {
     device = await findTargetDevice();
     if (device == null)
       return 1;
+    print('about to super verify');
     return super.verifyThenRunCommand();
   }
 
