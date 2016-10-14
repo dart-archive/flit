@@ -6,6 +6,7 @@ import 'package:flutter_tools/src/doctor.dart';
 import 'package:flutter_tools/src/base/context.dart';
 import 'package:flutter_tools/src/base/logger.dart';
 import 'package:flutter_tools/src/hot.dart';
+import 'package:flutter_tools/src/cache.dart';
 
 
 // import 'package:flutter_tools/src/commands/run.dart';
@@ -22,7 +23,7 @@ main(List<String> args) async {
   Doctor.initGlobal();
   context[AndroidSdk] = AndroidSdk.locateAndroidSdk();
 
-  String flutterPath = '~/GitRepos/flutter';
+  String flutterPath = '../../GitRepos/flutter';
   String appMain = "../myapp/lib/main.dart";
   String diagPath = "../myapp/lib/diagnostics.dart";
 
