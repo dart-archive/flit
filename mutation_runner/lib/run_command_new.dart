@@ -101,7 +101,7 @@ class RunCommand extends RunCommandBase {
 
       if (argsMap['debug-port'] != null) {
         try {
-          debugPort = argsMap;
+          debugPort = argsMap['debug-port'];
         } catch (error) {
           printError('Invalid port for `--debug-port`: $error');
           return 1;
