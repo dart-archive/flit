@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yourcompany.mutationRunner"
+    package="com.yourcompany.mutation_runner"
     android:versionCode="1"
     android:versionName="0.0.1">
 

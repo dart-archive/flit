@@ -24,8 +24,8 @@ main(List<String> args) async {
   context[AndroidSdk] = AndroidSdk.locateAndroidSdk();
 
   String flutterPath = '../../GitRepos/flutter';
-  String appMain = "../myapp/lib/main.dart";
-  String diagPath = "../myapp/lib/diagnostics.dart";
+  String appMain = "lib/myapp.dart";
+  String diagPath = "lib/diagnostics.dart";
 
   print ("About to create Run");
 
@@ -42,7 +42,6 @@ main(List<String> args) async {
     await new Future.delayed(new Duration(seconds: 1));
     print ('Waiting');
     print('ElementTree');
-    print('VM service = ' + runCmd.vmService.toString());
     hotRunner = runCmd.hotRunner;
 
     print('Hot runner = ${hotRunner.toString()}');
