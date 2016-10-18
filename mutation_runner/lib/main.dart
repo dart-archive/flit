@@ -54,6 +54,9 @@ main(List<String> args) async {
   print ("done waiting app should have started by now");
   print ("===========================================");
 
+  var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
+  print(await m);
+
   new io.File(diagPath)
     .watch().listen((_) async {
       print ("attempting restart");
