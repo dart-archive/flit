@@ -1,7 +1,0 @@
-name: myapp
-description: A new flutter project.
-dependencies:
-  flutter:
-    path: /Users/gbracha/gbracha-flutter/packages/flutter
-  flutter_tools:
-    path: /Users/gbracha/gbracha-flutter/packages/flutter_tools

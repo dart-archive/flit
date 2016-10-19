@@ -1,8 +1,0 @@
-name: flit
-version: 1.2.3
-
-dependencies:
-  cli_util: ^0.0.1
-  flutter:
-      path: ../../flutter/packages/flutter
-
