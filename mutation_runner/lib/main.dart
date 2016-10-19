@@ -12,7 +12,7 @@ import 'package:flutter_tools/src/cache.dart';
 // import 'package:flutter_tools/src/commands/run.dart';
 // import 'package:flutter_tools/src/commands/install.dart';
 
-import '../lib/run_command_new.dart';
+import 'run_command_new.dart';
 
 
 main(List<String> args) async {
