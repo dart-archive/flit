@@ -13,8 +13,6 @@ import 'package:flutter_tools/src/device.dart';
 import 'package:flutter_tools/src/globals.dart';
 import 'package:flutter_tools/src/hot.dart';
 import 'package:flutter_tools/src/resident_runner.dart';
-// import 'package:flutter_tools/src/run.dart';
-import 'package:flutter_tools/src/run.dart';
 import 'package:flutter_tools/src/runner/flutter_command.dart';
 import 'package:flutter_tools/src/vmservice.dart';
 

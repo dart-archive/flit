@@ -14,8 +14,6 @@ import 'dart:async' show Future;
 import 'package:flutter/widgets.dart' as flutter
     show Element, RenderObjectElement;
 
-import 'package:flutter/src/rendering/binding.dart' as flutterWidgetBindings
-    show RendererBinding;
 import 'package:flutter/src/widgets/binding.dart' as flutterWidgetBindings
     show WidgetsBinding;
 

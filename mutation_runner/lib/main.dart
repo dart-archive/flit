@@ -6,7 +6,6 @@ import 'package:flutter_tools/src/doctor.dart';
 import 'package:flutter_tools/src/base/context.dart';
 import 'package:flutter_tools/src/base/logger.dart';
 import 'package:flutter_tools/src/hot.dart';
-import 'package:flutter_tools/src/cache.dart';
 
 
 // import 'package:flutter_tools/src/commands/run.dart';
