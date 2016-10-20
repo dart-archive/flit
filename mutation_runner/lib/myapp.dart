@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'visting.dart';
+//import 'visting.dart';
 import 'diagnostics.dart';
 
 BuildContext savedContext;
 
 void main() {
-  stack = [
-    {'children': []}
-  ];
   runApp(
     new MaterialApp(
       title: 'Flutter Demo',
@@ -19,15 +16,21 @@ void main() {
     ),
   )
 );
-
-  print(savedContext);
 }
 
-String banner() {
-  if (savedContext == null) {
-    return 'Button';
+String computeText() {
+  StringBuffer sb = new StringBuffer();
+
+  print ("OriginMap Length: ${originMap.length}");
+
+  List<int> originKeys = originMap.keys.toList()..sort();
+//  return "${originKeys.length}";
+
+  for (var id in originKeys) {
+    Map mp = originMap[id];
+    sb.writeln("$id ${mp["widget"].runtimeType} ${mp["path"]} ${mp["line"]}:${mp["char"]}");
   }
-  return top()['children'].toString();
+ return sb.toString();
 }
 
 class FlutterDemo extends StatefulWidget {
@@ -41,17 +44,9 @@ class _FlutterDemoState extends State<FlutterDemo> {
   int _counter = 0;
 
   void _incrementCounter() {
-    stack = [
-      {'children': []}
-    ];
-    savedContext.visitChildElements(elementCollector);
     setState(() {
       _counter = _counter + 1;
     });
-  }
-
-  setSavedContext(c) {
-    if (savedContext == null) { savedContext = c;}
   }
 
   @override
@@ -62,8 +57,8 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
       )),
       body: h(3, new Center(
-        child: h(4, new Text('Our ' + banner() +' tapped $_counter time${ _counter == 1 ? '' : 's' }.')),
-
+        child: h(4, new Text("${computeText()}")),
+//        child: h(4, new Text("test")),
       )),
       floatingActionButton: h(5, new FloatingActionButton(
         onPressed: _incrementCounter,
@@ -71,8 +66,6 @@ class _FlutterDemoState extends State<FlutterDemo> {
         child: h(6, new Icon(Icons.add)),
       )),
     ));
-    setSavedContext(context);
-
     return tree;
   }
 }
