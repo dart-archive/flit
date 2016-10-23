@@ -10,11 +10,9 @@ import 'package:flutter_tools/src/base/context.dart';
 import 'package:flutter_tools/src/base/logger.dart';
 import 'package:flutter_tools/src/globals.dart';
 import 'package:flutter_tools/src/hot.dart';
-
-import 'package:flutter_tools/src/vmservice.dart';
-import 'package:path/path.dart' as path;
-
 import 'package:flutter_tools/src/resident_runner.dart';
+import 'package:path/path.dart' as path;
+import 'package:vm_service_client/vm_service_client.dart';
 
 main(List<String> args) async {
   String flutterRoot = '../../flutter';
@@ -54,11 +52,25 @@ main(List<String> args) async {
 
   // Wait for application to start and VM service to connect
   DebugConnectionInfo debugInfo = await debugInfoCompleter.future;
-  await hotRunner.connectToServiceProtocol(debugInfo.port);
-  VMService vmService = hotRunner.vmService;
+  VMServiceClient vmClient =
+      new VMServiceClient.connect('http://127.0.0.1:${debugInfo.port}');
 
   var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
   print(await m);
+
+  // Load the originMap from the running application
+  VMIsolateRef isolateRef = await vmClient.onIsolateStart.first;
+  VMRunnableIsolate isolate = await isolateRef.loadRunnable();
+  Map<Uri, VMLibraryRef> libraries = isolate.libraries;
+  VMLibraryRef libRef = libraries[libraries.keys
+      .firstWhere((Uri url) => url.path.endsWith('/lib/diagnostics.dart'))];
+  VMLibrary lib = await libRef.load();
+  Map originMap = await loadRef(lib.fields['originMap']);
+
+  // Delay before printing to prevent text collision in console
+  new Future.delayed(new Duration(seconds: 5)).then((_) {
+    print('originMap = $originMap}');
+  });
 
   // Update the running application whenever the diagFile changes
   io.File diagFile = new io.File(diagPath);
@@ -79,11 +91,11 @@ main(List<String> args) async {
         }
 
         // If application has not exited, then watch the diagFile again
-        if (running)
-          watchDiagFile();
+        if (running) watchDiagFile();
       }
     });
   }
+
   watchDiagFile();
 
   // Cleanup when the application exits
@@ -93,4 +105,20 @@ main(List<String> args) async {
     subscription = null;
     running = false;
   });
+}
+
+/// Recursively load the specified object from the VM.
+Future<dynamic> loadRef(VMObjectRef ref) async {
+  var obj = await ref.load();
+  if (obj is VMValueInstance) return obj.value;
+  if (obj is VMStringInstance) return obj.value;
+  if (obj is VMMapInstance) {
+    Map map = {};
+    for (VMMapAssociation assoc in obj.associations) {
+      map[await loadRef(assoc.key)] = await loadRef(assoc.value);
+    }
+    return map;
+  }
+  if (obj is VMField) return loadRef(obj.value);
+  return obj.runtimeType;
 }
