@@ -11,6 +11,7 @@ import 'package:flutter_tools/src/base/logger.dart';
 import 'package:flutter_tools/src/globals.dart';
 import 'package:flutter_tools/src/hot.dart';
 
+import 'package:flutter_tools/src/vmservice.dart';
 import 'package:path/path.dart' as path;
 
 import 'package:flutter_tools/src/resident_runner.dart';
@@ -41,26 +42,55 @@ main(List<String> args) async {
     debuggingOptions: debugOptions,
   );
 
+  // Launch the application
   Completer<DebugConnectionInfo> debugInfoCompleter =
       new Completer<DebugConnectionInfo>();
-  hotRunner.run(
+  Future<int> run = hotRunner.run(
     connectionInfoCompleter: debugInfoCompleter,
     route: route,
     shouldBuild: true,
   );
-  DebugConnectionInfo debugInfo = await debugInfoCompleter.future;
+  bool running = true;
 
   // Wait for application to start and VM service to connect
+  DebugConnectionInfo debugInfo = await debugInfoCompleter.future;
   await hotRunner.connectToServiceProtocol(debugInfo.port);
+  VMService vmService = hotRunner.vmService;
 
   var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
   print(await m);
 
-  new io.File(diagPath).watch().listen((io.FileSystemEvent event) async {
-    print(">>> ${event.type}, ${event.path}");
-    print("attempting restart");
-    await hotRunner.restart(fullRestart: true);
-    print("Restart complete");
-    await new Future.delayed(new Duration(seconds: 5));
+  // Update the running application whenever the diagFile changes
+  io.File diagFile = new io.File(diagPath);
+  StreamSubscription<io.FileSystemEvent> subscription;
+  void watchDiagFile() {
+    subscription = diagFile.watch().listen((io.FileSystemEvent event) async {
+      print("attempting restart");
+      await hotRunner.restart(fullRestart: true);
+      print("restart complete");
+
+      // If diagFile was deleted when wait for it to be recreated
+      // before watching the file again
+      if (event.type == io.FileSystemEvent.DELETE) {
+        subscription?.cancel();
+        subscription = null;
+        while (running && !await diagFile.exists()) {
+          await new Future.delayed(new Duration(milliseconds: 10));
+        }
+
+        // If application has not exited, then watch the diagFile again
+        if (running)
+          watchDiagFile();
+      }
+    });
+  }
+  watchDiagFile();
+
+  // Cleanup when the application exits
+  run.then((int exitCode) {
+    print('application exit: $exitCode');
+    subscription?.cancel();
+    subscription = null;
+    running = false;
   });
 }
