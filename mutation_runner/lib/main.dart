@@ -50,7 +50,11 @@ main(List<String> args) async {
   );
   DebugConnectionInfo debugInfo = await debugInfoCompleter.future;
 
+  // Wait for application to start and VM service to connect
   await hotRunner.connectToServiceProtocol(debugInfo.port);
+
+  var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
+  print(await m);
 
   new io.File(diagPath).watch().listen((io.FileSystemEvent event) async {
     print(">>> ${event.type}, ${event.path}");
