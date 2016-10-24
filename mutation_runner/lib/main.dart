@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_tools/src/base/common.dart';
 import 'package:flutter_tools/src/build_info.dart';
@@ -14,11 +15,15 @@ import 'package:flutter_tools/src/resident_runner.dart';
 import 'package:path/path.dart' as path;
 import 'package:vm_service_client/vm_service_client.dart';
 
+
+const DIAGNOSTICS_PATH = '/lib/diagnostics.dart';
+
 main(List<String> args) async {
   String flutterRoot = '../../GitRepos/flutter';
   String target = "lib/myapp.dart";
   String route = "/";
   String diagPath = "lib/diagnostics.dart";
+  const int SERVER_PORT = 9998;
 
   // Initialize globals.
   Cache.flutterRoot = path.normalize(path.absolute(flutterRoot));
@@ -57,60 +62,39 @@ main(List<String> args) async {
 
   await setHighlights(isolateRef, []);
 
+  // Server based requests
 
-//  var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
-//  print(await m);
+  var requestServer =
+    await io.HttpServer.bind(io.InternetAddress.LOOPBACK_IP_V4, SERVER_PORT);
+  print('listening on localhost, port ${requestServer.port}');
 
-  // Delay before printing to prevent text collision in console
-  new Future.delayed(new Duration(seconds: 5)).then((_) async {
+  await for (io.HttpRequest request in requestServer) {
+    addCorsHeaders(request.response);
+    print ("${request.method} ${request.uri.path}");
 
-    await setHighlights(isolateRef, []);
-    await new Future.delayed(new Duration(seconds: 2));
-    await setHighlights(isolateRef, [4]);
-    await new Future.delayed(new Duration(seconds: 2));
-    await setHighlights(isolateRef, [5]);
-    await new Future.delayed(new Duration(seconds: 2));
-    await setHighlights(isolateRef, [4, 5]);
-  });
+    switch (request.uri.path) {
+      case "/getIds":
+        Map idMap = await getIds(isolateRef);
+        Map jsonSafeMap = {};
+        idMap.forEach((k, v) {
+          jsonSafeMap["$k"] = v;
+        });
 
-  // Update the running application whenever the diagFile changes
-  io.File diagFile = new io.File(diagPath);
-  StreamSubscription<io.FileSystemEvent> subscription;
-  void watchDiagFile() {
-    subscription = diagFile.watch().listen((io.FileSystemEvent event) async {
-      print("attempting restart");
-      await hotRunner.restart(fullRestart: true);
-      print("restart complete");
-
-      // If diagFile was deleted when wait for it to be recreated
-      // before watching the file again
-      if (event.type == io.FileSystemEvent.DELETE) {
-        subscription?.cancel();
-        subscription = null;
-        while (running && !await diagFile.exists()) {
-          await new Future.delayed(new Duration(milliseconds: 10));
-        }
-
-        // If application has not exited, then watch the diagFile again
-        if (running) watchDiagFile();
-      }
-    });
+        request.response..write(await JSON.encode(jsonSafeMap))..close();
+        break;
+      case "/setHighlights":
+        String requestBody = await request.transform(UTF8.decoder).join();
+        print ("Setting Highlights: $requestBody");
+        List ids = JSON.decode(requestBody);
+        setHighlights(isolateRef, ids);
+        request.response..writeln("Done")..close();
+        break;
+    }
   }
-
-  watchDiagFile();
-
-  // Cleanup when the application exits
-  run.then((int exitCode) {
-    print('application exit: $exitCode');
-    subscription?.cancel();
-    subscription = null;
-    running = false;
-  });
 }
 
 // UI Support methods
 
-const DIAGNOSTICS_PATH = '/lib/diagnostics.dart';
 
 setHighlights(VMIsolateRef isolateRef, List<int> highlightIds) async {
   VMLibrary lib = await _getLibrary(isolateRef, DIAGNOSTICS_PATH);
@@ -126,13 +110,11 @@ setHighlights(VMIsolateRef isolateRef, List<int> highlightIds) async {
 
 }
 
-Future<List> getIds(VMIsolateRef isolateRef) async {
+Future<Map> getIds(VMIsolateRef isolateRef) async {
   VMLibrary lib = await _getLibrary(isolateRef, DIAGNOSTICS_PATH);
-  VMFieldRef highlightIdsField = lib.fields['highlightIds'];
-  List existinghighlightIds = await loadRef(highlightIdsField);
-  return existinghighlightIds;
+  Map originMap = await loadRef(lib.fields['originMap']);
+  return originMap;
 }
-
 
 
 // VM Support methods
@@ -188,5 +170,9 @@ Future<List> updateHighlightIds(VMFieldRef fieldRef, List newValues) async {
   return remoteValues;
 }
 
-
-
+// Server support methods
+void addCorsHeaders(io.HttpResponse res) {
+  res.headers.add("Access-Control-Allow-Origin", "*");
+  res.headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+  res.headers.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+}
