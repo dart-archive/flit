@@ -58,7 +58,7 @@ main(List<String> args) async {
   var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
   print(await m);
 
-  // Load the originMap from the running application
+  // Load the originMap and highlightIds from the running application
   VMIsolateRef isolateRef = await vmClient.onIsolateStart.first;
   VMRunnableIsolate isolate = await isolateRef.loadRunnable();
   Map<Uri, VMLibraryRef> libraries = isolate.libraries;
@@ -66,10 +66,12 @@ main(List<String> args) async {
       .firstWhere((Uri url) => url.path.endsWith('/lib/diagnostics.dart'))];
   VMLibrary lib = await libRef.load();
   Map originMap = await loadRef(lib.fields['originMap']);
+  var highlightIds = await loadRef(lib.fields['highlightIds']);
 
   // Delay before printing to prevent text collision in console
   new Future.delayed(new Duration(seconds: 5)).then((_) {
     print('originMap = $originMap}');
+    print('highlightIds = $highlightIds');
   });
 
   // Update the running application whenever the diagFile changes
@@ -112,6 +114,19 @@ Future<dynamic> loadRef(VMObjectRef ref) async {
   var obj = await ref.load();
   if (obj is VMValueInstance) return obj.value;
   if (obj is VMStringInstance) return obj.value;
+  if (obj is VMListInstance) {
+    List list = [];
+    for (var elem in obj.elements) {
+      if (elem is VMObjectRef) {
+        list.add(await loadRef(elem));
+      } else if (elem is VMSentinel) {
+        list.add(elem.toString());
+      } else {
+        list.add(elem);
+      }
+    }
+    return list;
+  }
   if (obj is VMMapInstance) {
     Map map = {};
     for (VMMapAssociation assoc in obj.associations) {
