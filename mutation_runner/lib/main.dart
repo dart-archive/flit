@@ -74,13 +74,13 @@ main(List<String> args) async {
     print('originMap = $originMap}');
     print('highlightIds = $highlightIds');
 
-    await updateHighlightIds(highlightIdsField, [5]);
+    await updateHighlightIds(highlightIdsField, []);
     await new Future.delayed(new Duration(seconds: 2));
     await updateHighlightIds(highlightIdsField, [4]);
     await new Future.delayed(new Duration(seconds: 2));
-    await updateHighlightIds(highlightIdsField, [4, 5]);
-    await new Future.delayed(new Duration(seconds: 2));
     await updateHighlightIds(highlightIdsField, [5]);
+    await new Future.delayed(new Duration(seconds: 2));
+    await updateHighlightIds(highlightIdsField, [4, 5]);
   });
 
   // Update the running application whenever the diagFile changes
@@ -149,11 +149,13 @@ Future<dynamic> loadRef(VMObjectRef ref) async {
 
 /// Update the highlightIds and pull new values from the Flutter app
 Future<List> updateHighlightIds(VMFieldRef fieldRef, List newValues) async {
-  String expression = '${fieldRef.name} = [${newValues.join(',')}]';
+  String expression = 'updateHighlightIds([${newValues.join(',')}]);';
   print('Evaluating: $expression');
   VMLibraryRef libRef = fieldRef.owner;
   VMInstanceRef result = await libRef.evaluate(expression);
   List remoteValues = await loadRef(result);
+  print('   = ${remoteValues}');
+  remoteValues = await loadRef(fieldRef);
   print('   = ${remoteValues}');
   return remoteValues;
 }
