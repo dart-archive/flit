@@ -24,7 +24,6 @@ main(List<String> args) async {
   Cache.flutterRoot = path.normalize(path.absolute(flutterRoot));
   context[Logger] = new StdoutLogger();
   context[DeviceManager] = new DeviceManager();
-//  context[AndroidSdk] = AndroidSdk.locateAndroidSdk();
   Doctor.initGlobal();
 
   List<Device> allDevices = await deviceManager.getAllConnectedDevices();
@@ -54,33 +53,21 @@ main(List<String> args) async {
   DebugConnectionInfo debugInfo = await debugInfoCompleter.future;
   VMServiceClient vmClient =
       new VMServiceClient.connect('http://127.0.0.1:${debugInfo.port}');
+  VMIsolateRef isolateRef = await vmClient.onIsolateStart.first;
 
 //  var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
 //  print(await m);
 
-  // Load the originMap and highlightIds from the running application
-  VMIsolateRef isolateRef = await vmClient.onIsolateStart.first;
-  VMRunnableIsolate isolate = await isolateRef.loadRunnable();
-  Map<Uri, VMLibraryRef> libraries = isolate.libraries;
-  VMLibraryRef libRef = libraries[libraries.keys
-      .firstWhere((Uri url) => url.path.endsWith('/lib/diagnostics.dart'))];
-  VMLibrary lib = await libRef.load();
-  VMFieldRef highlightIdsField = lib.fields['highlightIds'];
-  Map originMap = await loadRef(lib.fields['originMap']);
-  List highlightIds = await loadRef(highlightIdsField);
-
   // Delay before printing to prevent text collision in console
   new Future.delayed(new Duration(seconds: 5)).then((_) async {
-    print('originMap = $originMap}');
-    print('highlightIds = $highlightIds');
 
-    await updateHighlightIds(highlightIdsField, []);
+    await setHighlights(isolateRef, []);
     await new Future.delayed(new Duration(seconds: 2));
-    await updateHighlightIds(highlightIdsField, [4]);
+    await setHighlights(isolateRef, [4]);
     await new Future.delayed(new Duration(seconds: 2));
-    await updateHighlightIds(highlightIdsField, [5]);
+    await setHighlights(isolateRef, [5]);
     await new Future.delayed(new Duration(seconds: 2));
-    await updateHighlightIds(highlightIdsField, [4, 5]);
+    await setHighlights(isolateRef, [4, 5]);
   });
 
   // Update the running application whenever the diagFile changes
@@ -116,6 +103,37 @@ main(List<String> args) async {
     subscription = null;
     running = false;
   });
+}
+
+// UI Support methods
+
+setHighlights(VMIsolateRef isolateRef, List<int> highlightIds) async {
+  VMLibrary lib = await _getLibrary(isolateRef, '/lib/diagnostics.dart');
+  VMFieldRef highlightIdsField = lib.fields['highlightIds'];
+  Map originMap = await loadRef(lib.fields['originMap']);
+  List existinghighlightIds = await loadRef(highlightIdsField);
+
+  // Delay before printing to prevent text collision in console
+  print('originMap = $originMap}');
+  print('highlightIds = $existinghighlightIds');
+
+  await updateHighlightIds(highlightIdsField, highlightIds);
+
+}
+
+
+
+// VM Support methods
+
+
+
+Future<VMLibrary> _getLibrary(VMIsolateRef isolateRef, String name) async {
+  VMRunnableIsolate isolate = await isolateRef.loadRunnable();
+  Map<Uri, VMLibraryRef> libraries = isolate.libraries;
+  VMLibraryRef libRef = libraries[libraries.keys
+      .firstWhere((Uri url) => url.path.endsWith(name))];
+  VMLibrary lib = await libRef.load();
+  return lib;
 }
 
 /// Recursively load the specified object from the VM.
@@ -159,3 +177,6 @@ Future<List> updateHighlightIds(VMFieldRef fieldRef, List newValues) async {
   print('   = ${remoteValues}');
   return remoteValues;
 }
+
+
+
