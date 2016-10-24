@@ -65,13 +65,22 @@ main(List<String> args) async {
   VMLibraryRef libRef = libraries[libraries.keys
       .firstWhere((Uri url) => url.path.endsWith('/lib/diagnostics.dart'))];
   VMLibrary lib = await libRef.load();
+  VMFieldRef highlightIdsField = lib.fields['highlightIds'];
   Map originMap = await loadRef(lib.fields['originMap']);
-  var highlightIds = await loadRef(lib.fields['highlightIds']);
+  List highlightIds = await loadRef(highlightIdsField);
 
   // Delay before printing to prevent text collision in console
-  new Future.delayed(new Duration(seconds: 5)).then((_) {
+  new Future.delayed(new Duration(seconds: 5)).then((_) async {
     print('originMap = $originMap}');
     print('highlightIds = $highlightIds');
+
+    await updateHighlightIds(highlightIdsField, [5]);
+    await new Future.delayed(new Duration(seconds: 2));
+    await updateHighlightIds(highlightIdsField, [4]);
+    await new Future.delayed(new Duration(seconds: 2));
+    await updateHighlightIds(highlightIdsField, [4, 5]);
+    await new Future.delayed(new Duration(seconds: 2));
+    await updateHighlightIds(highlightIdsField, [5]);
   });
 
   // Update the running application whenever the diagFile changes
@@ -136,4 +145,15 @@ Future<dynamic> loadRef(VMObjectRef ref) async {
   }
   if (obj is VMField) return loadRef(obj.value);
   return obj.runtimeType;
+}
+
+/// Update the highlightIds and pull new values from the Flutter app
+Future<List> updateHighlightIds(VMFieldRef fieldRef, List newValues) async {
+  String expression = '${fieldRef.name} = [${newValues.join(',')}]';
+  print('Evaluating: $expression');
+  VMLibraryRef libRef = fieldRef.owner;
+  VMInstanceRef result = await libRef.evaluate(expression);
+  List remoteValues = await loadRef(result);
+  print('   = ${remoteValues}');
+  return remoteValues;
 }
