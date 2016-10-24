@@ -55,6 +55,9 @@ main(List<String> args) async {
       new VMServiceClient.connect('http://127.0.0.1:${debugInfo.port}');
   VMIsolateRef isolateRef = await vmClient.onIsolateStart.first;
 
+  await setHighlights(isolateRef, []);
+
+
 //  var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
 //  print(await m);
 
@@ -107,8 +110,10 @@ main(List<String> args) async {
 
 // UI Support methods
 
+const DIAGNOSTICS_PATH = '/lib/diagnostics.dart';
+
 setHighlights(VMIsolateRef isolateRef, List<int> highlightIds) async {
-  VMLibrary lib = await _getLibrary(isolateRef, '/lib/diagnostics.dart');
+  VMLibrary lib = await _getLibrary(isolateRef, DIAGNOSTICS_PATH);
   VMFieldRef highlightIdsField = lib.fields['highlightIds'];
   Map originMap = await loadRef(lib.fields['originMap']);
   List existinghighlightIds = await loadRef(highlightIdsField);
@@ -121,11 +126,16 @@ setHighlights(VMIsolateRef isolateRef, List<int> highlightIds) async {
 
 }
 
+Future<List> getIds(VMIsolateRef isolateRef) async {
+  VMLibrary lib = await _getLibrary(isolateRef, DIAGNOSTICS_PATH);
+  VMFieldRef highlightIdsField = lib.fields['highlightIds'];
+  List existinghighlightIds = await loadRef(highlightIdsField);
+  return existinghighlightIds;
+}
+
 
 
 // VM Support methods
-
-
 
 Future<VMLibrary> _getLibrary(VMIsolateRef isolateRef, String name) async {
   VMRunnableIsolate isolate = await isolateRef.loadRunnable();
