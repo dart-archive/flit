@@ -1,0 +1,4 @@
+name: server2
+description: A new flutter project.
+dependencies:
+  path: any
