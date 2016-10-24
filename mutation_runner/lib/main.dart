@@ -15,7 +15,7 @@ import 'package:path/path.dart' as path;
 import 'package:vm_service_client/vm_service_client.dart';
 
 main(List<String> args) async {
-  String flutterRoot = '../../flutter';
+  String flutterRoot = '../../GitRepos/flutter';
   String target = "lib/myapp.dart";
   String route = "/";
   String diagPath = "lib/diagnostics.dart";
@@ -55,8 +55,8 @@ main(List<String> args) async {
   VMServiceClient vmClient =
       new VMServiceClient.connect('http://127.0.0.1:${debugInfo.port}');
 
-  var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
-  print(await m);
+//  var m = hotRunner.currentView.uiIsolate.flutterDebugReturnElementTree();
+//  print(await m);
 
   // Load the originMap and highlightIds from the running application
   VMIsolateRef isolateRef = await vmClient.onIsolateStart.first;
