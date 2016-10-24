@@ -83,6 +83,14 @@ main(List<String> args) async {
     await updateHighlightIds(highlightIdsField, [4, 5]);
   });
 
+  // Listen for selection events from the app and update the highlighting
+  isolateRef.onExtensionEvent.listen((VMExtensionEvent event) {
+    if (event.kind == 'Flutter.WidgetSelection') {
+      int id = event.data['id'];
+      updateHighlightIds(highlightIdsField, [id]);
+    }
+  });
+
   // Update the running application whenever the diagFile changes
   io.File diagFile = new io.File(diagPath);
   StreamSubscription<io.FileSystemEvent> subscription;

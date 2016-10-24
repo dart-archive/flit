@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -37,25 +38,40 @@ registerWithOriginMap(id, widget) {
 
 Widget h(id, Widget w) {
   registerWithOriginMap(id, w);
-  if (!highlightIds.contains(id)) return w;
-  return new CustomPaint(child: w, foregroundPainter: new HighlightPainter());
+  // TODO(danrubel): how to highlight the AppBar
+  if (w is AppBar) return w;
+  return new GestureDetector(
+    child: new CustomPaint(
+      child: w,
+      foregroundPainter: new HighlightPainter(id),
+    ),
+    onTap: () {
+      postEvent('Flutter.WidgetSelection', {'id': id});
+    }
+  );
 }
 
 class HighlightPainter extends CustomPainter {
+  final int id;
+
+  HighlightPainter(this.id);
+
   @override
   void paint(Canvas canvas, Size size) {
+    if (!highlightIds.contains(id)) return;
     final Paint paint = new Paint()
       ..color = Colors.red[500].withOpacity(0.40)
       ..style = PaintingStyle.fill
       ..strokeWidth = 5.0;
     canvas.drawRRect(
         new RRect.fromRectAndCorners(
-          new Rect.fromLTWH(-5.0, -5.0, size.width + 10.0, size.height + 10.0),
-          topLeft: new Radius.circular(2.0),
-          topRight: new Radius.circular(2.0),
-          bottomLeft: new Radius.circular(2.0),
-          bottomRight: new Radius.circular(2.0)
-        ), paint);
+            new Rect.fromLTWH(
+                -5.0, -5.0, size.width + 10.0, size.height + 10.0),
+            topLeft: new Radius.circular(2.0),
+            topRight: new Radius.circular(2.0),
+            bottomLeft: new Radius.circular(2.0),
+            bottomRight: new Radius.circular(2.0)),
+        paint);
   }
 
   @override
