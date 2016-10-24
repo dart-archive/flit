@@ -21,14 +21,10 @@ void main() {
 String computeText() {
   StringBuffer sb = new StringBuffer();
 
-  print ("OriginMap Length: ${originMap.length}");
-
   List<int> originKeys = originMap.keys.toList()..sort();
-//  return "${originKeys.length}";
-
   for (var id in originKeys) {
     Map mp = originMap[id];
-    sb.writeln("$id ${mp["widget"]} ${mp["path"]} ${mp["line"]}:${mp["char"]}");
+    sb.writeln("$id ${mp["widgetName"]} ${mp["path"]} ${mp["line"]}:${mp["char"]}");
   }
  return sb.toString();
 }
