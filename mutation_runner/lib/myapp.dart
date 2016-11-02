@@ -13,22 +13,18 @@ void main() {
         primarySwatch: Colors.blue,
       ),
       home: new FlutterDemo(
-    ),
-  )
-);
+      ),
+    )
+  );
 }
 
 String computeText() {
   StringBuffer sb = new StringBuffer();
 
-  print ("OriginMap Length: ${originMap.length}");
-
   List<int> originKeys = originMap.keys.toList()..sort();
-//  return "${originKeys.length}";
-
   for (var id in originKeys) {
     Map mp = originMap[id];
-    sb.writeln("$id ${mp["widget"].runtimeType} ${mp["path"]} ${mp["line"]}:${mp["char"]}");
+    sb.writeln("$id ${mp["widgetName"]} ${mp["path"]} ${mp["line"]}:${mp["char"]}");
   }
  return sb.toString();
 }
@@ -37,7 +33,9 @@ class FlutterDemo extends StatefulWidget {
   FlutterDemo({ Key key }) : super(key: key);
 
   @override
-  _FlutterDemoState createState() => new _FlutterDemoState();
+  _FlutterDemoState createState() {
+    return globalState = new _FlutterDemoState();
+  }
 }
 
 class _FlutterDemoState extends State<FlutterDemo> {

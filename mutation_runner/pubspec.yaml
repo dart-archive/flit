@@ -10,3 +10,5 @@ dependencies:
 
   flutter:
      path: ../../GitRepos/flutter/packages/flutter/
+
+  vm_service_lib: any

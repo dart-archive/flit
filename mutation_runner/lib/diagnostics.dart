@@ -1,6 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-List<int> highlightIds = [4, 5];
+/// [globalState] must be initialized on startup by the application
+/// so that [updateHighlightIds] can refresh the current view
+State globalState;
+
+List<int> highlightIds = [5];
+
+/// Update the highlight and refresh the view.
+Future<Null> updateHighlightIds(List<int> newValues) async {
+  globalState.setState(() {
+    highlightIds = newValues;
+  });
+}
 
 // TODO: modify the objects to that they accept a const parameter
 // listing their ctor callsite
@@ -8,15 +21,17 @@ List<int> highlightIds = [4, 5];
 // but aren't replaced
 Map<int, Map<String, Object>> originMap = {};
 
-
 registerWithOriginMap(id, widget) {
   var st = StackTrace.current;
   var location = _extractHLocation(st);
+
+  // serialize and send originMap over wire to laptop
+  // using the VM service protocol
   originMap[id] = {
-    "path" : location.path.split("/").last, // Friendly path
-    "line" : location.line,
-    "char" : location.char,
-    "widget" : widget
+    "path": location.path.split("/").last, // Friendly path
+    "line": location.line,
+    "char": location.char,
+    "widgetName": "${widget.runtimeType}",
   };
 }
 
