@@ -5,6 +5,8 @@
 import 'package:flutter/material.dart';
 
 import 'calculator/home.dart';
+import '../diagnostics.dart';
+
 
 class CalculatorDemo extends StatelessWidget {
   CalculatorDemo({Key key}) : super(key: key);

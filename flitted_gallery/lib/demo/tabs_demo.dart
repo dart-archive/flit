@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 // Each TabBarView contains a _Page and for each _Page there is a list
 // of _CardData objects. Each _CardData object is displayed by a _CardItem.

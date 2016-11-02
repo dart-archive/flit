@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../diagnostics.dart';
 
 enum GridDemoTileStyle {
   imageOnly,

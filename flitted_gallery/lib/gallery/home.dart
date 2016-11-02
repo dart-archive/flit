@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 
 import 'drawer.dart';
 import 'item.dart';
+import '../diagnostics.dart';
 
 const double _kFlexibleSpaceMaxHeight = 256.0;
 

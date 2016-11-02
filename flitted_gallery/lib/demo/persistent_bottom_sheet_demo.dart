@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class PersistentBottomSheetDemo extends StatefulWidget {
   static const String routeName = '/persistent-bottom-sheet';

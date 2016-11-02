@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'shrine/shrine_home.dart' show ShrineHome;
 import 'shrine/shrine_theme.dart' show ShrineTheme;
+import '../diagnostics.dart';
 
 // This code would ordinarily be part of the MaterialApp's home. It's being
 // used by the ShrineDemo and by each route pushed from there because this

@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'shrine_theme.dart';
 import 'shrine_types.dart';
 
+import '../../diagnostics.dart';
+
+
 enum ShrineAction {
   sortByPrice,
   sortByProduct,

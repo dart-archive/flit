@@ -7,6 +7,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import '../demo/all.dart';
+import '../diagnostics.dart';
 
 typedef Widget GalleryDemoBuilder();
 

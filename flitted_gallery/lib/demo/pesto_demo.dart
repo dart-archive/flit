@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import '../diagnostics.dart';
 
 class PestoDemo extends StatelessWidget {
   PestoDemo({ Key key }) : super(key: key);

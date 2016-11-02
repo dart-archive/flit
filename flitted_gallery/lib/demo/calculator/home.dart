@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'logic.dart';
 
+import '../../diagnostics.dart';
+
 class Calculator extends StatefulWidget {
   Calculator({Key key}) : super(key: key);
 

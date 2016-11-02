@@ -4,6 +4,9 @@
 
 import 'package:flutter/material.dart';
 
+import '../diagnostics.dart';
+
+
 class NavigationIconView {
   NavigationIconView({
     Icon icon,

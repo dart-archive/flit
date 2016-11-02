@@ -5,6 +5,8 @@
 import 'package:flutter/material.dart';
 
 import '../gallery/demo.dart';
+import '../diagnostics.dart';
+
 
 const String _raisedText =
     "Raised buttons add dimension to mostly flat layouts. They emphasize "

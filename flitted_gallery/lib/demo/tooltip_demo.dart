@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 const String _introText =
   "Tooltips are short identifying messages that briefly appear in response to "

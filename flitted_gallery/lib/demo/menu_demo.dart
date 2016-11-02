@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class MenuDemo extends StatefulWidget {
   MenuDemo({ Key key }) : super(key: key);

@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../diagnostics.dart';
 
 class TextStyleItem extends StatelessWidget {
   TextStyleItem({ Key key, this.name, this.style, this.text }) : super(key: key) {

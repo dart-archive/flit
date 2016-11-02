@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class ListDemo extends StatefulWidget {
   ListDemo({ Key key }) : super(key: key);

@@ -6,6 +6,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../diagnostics.dart';
 
 typedef Future<String> UpdateUrlFetcher();
 

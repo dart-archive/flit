@@ -9,6 +9,9 @@ import 'shrine_page.dart';
 import 'shrine_theme.dart';
 import 'shrine_types.dart';
 
+import '../../diagnostics.dart';
+
+
 /// Describes a product and vendor in detail, supports specifying
 /// a order quantity (0-5). Appears at the top of the OrderPage.
 class OrderItem extends StatelessWidget {

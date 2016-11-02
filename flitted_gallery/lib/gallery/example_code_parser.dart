@@ -5,6 +5,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import '../diagnostics.dart';
 
 const String _kStartTag = '// START ';
 const String _kEndTag = '// END';

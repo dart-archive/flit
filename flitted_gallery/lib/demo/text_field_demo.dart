@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class TextFieldDemo extends StatefulWidget {
   TextFieldDemo({ Key key }) : super(key: key);

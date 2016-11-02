@@ -5,6 +5,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class TimePickerDemo extends StatefulWidget {
   static const String routeName = '/time-picker';

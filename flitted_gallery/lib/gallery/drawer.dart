@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../diagnostics.dart';
 
 class LinkTextSpan extends TextSpan {
   LinkTextSpan({ TextStyle style, String url, String text }) : super(

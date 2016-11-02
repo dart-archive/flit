@@ -6,6 +6,7 @@
 // gallery.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class ButtonsDemo {
   void setState(VoidCallback callback) { }

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class LimitDemo extends StatelessWidget {
   @override

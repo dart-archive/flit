@@ -4,6 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../diagnostics.dart';
+
 
 class TravelDestination {
   const TravelDestination({ this.assetName, this.title, this.description });

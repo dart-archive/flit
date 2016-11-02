@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 
 import '../gallery/demo.dart';
+import '../diagnostics.dart';
 
 const String _checkboxText =
   "Checkboxes allow the user to select multiple options from a set.";

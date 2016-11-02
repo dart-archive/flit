@@ -6,6 +6,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../diagnostics.dart';
 
 class DatePickerDemo extends StatefulWidget {
   static const String routeName = '/date-picker';

@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class _ContactCategory extends StatelessWidget {
   _ContactCategory({ Key key, this.icon, this.children }) : super(key: key);

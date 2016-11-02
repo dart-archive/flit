@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class ModalBottomSheetDemo extends StatelessWidget {
   static const String routeName = '/modal-bottom-sheet';

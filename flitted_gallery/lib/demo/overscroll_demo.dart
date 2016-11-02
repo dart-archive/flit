@@ -5,6 +5,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 enum IndicatorType { overscroll, refresh }
 

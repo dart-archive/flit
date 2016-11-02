@@ -12,6 +12,9 @@ import 'shrine_page.dart';
 import 'shrine_theme.dart';
 import 'shrine_types.dart';
 
+import '../../diagnostics.dart';
+
+
 const double unitSize = kToolbarHeight;
 
 final List<Product> _products = new List<Product>.from(allProducts());

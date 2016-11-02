@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import '../diagnostics.dart';
 
 class ProgressIndicatorDemo extends StatefulWidget {
   static const String routeName = '/progress-indicator';

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'example_code_parser.dart';
 import 'syntax_highlighter.dart';
+import '../diagnostics.dart';
 
 class ComponentDemoTabData {
   ComponentDemoTabData({

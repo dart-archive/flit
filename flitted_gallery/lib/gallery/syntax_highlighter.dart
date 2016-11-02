@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:string_scanner/string_scanner.dart';
+import '../diagnostics.dart';
 
 class SyntaxHighlighterStyle {
   SyntaxHighlighterStyle({

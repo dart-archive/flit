@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../diagnostics.dart';
 
 const double kColorItemHeight = 48.0;
 
