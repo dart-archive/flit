@@ -72,24 +72,24 @@ class VendorItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new SizedBox(
+    return h(10000, new SizedBox(
       height: 24.0,
-      child: new Row(
+      child: h(10001, new Row(
         children: <Widget>[
           new SizedBox(
             width: 24.0,
-            child: new ClipRRect(
+            child: h(10002, new ClipRRect(
               borderRadius: new BorderRadius.circular(12.0),
-              child: new Image.asset(vendor.avatarAsset, fit: ImageFit.cover)
-            )
+              child: h(10003, new Image.asset(vendor.avatarAsset, fit: ImageFit.cover))
+            ))
           ),
-          new SizedBox(width: 8.0),
-          new Flexible(
-            child: new Text(vendor.name, style: ShrineTheme.of(context).vendorItemStyle)
-          )
+          h(10004, new SizedBox(width: 8.0)),
+          h(10005, new Flexible(
+            child: h(10006, new Text(vendor.name, style: ShrineTheme.of(context).vendorItemStyle))
+          ))
         ]
-      )
-    );
+      ))
+    ));
   }
 }
 
@@ -107,11 +107,11 @@ abstract class PriceItem extends StatelessWidget {
     if (_shoppingCart[product] != null)
       decoration = new BoxDecoration(backgroundColor: ShrineTheme.of(context).priceHighlightColor);
 
-    return new Container(
+    return h(10007, new Container(
       padding: padding,
       decoration: decoration,
-      child: new Text(product.priceString, style: style)
-    );
+      child: h(10008, new Text(product.priceString, style: style))
+    ));
   }
 }
 
@@ -178,67 +178,67 @@ class FeatureItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ShrineTheme theme = ShrineTheme.of(context);
-    return new AspectRatio(
+    return h(10009, new AspectRatio(
       aspectRatio: 3.0 / 3.5,
-      child: new Container(
+      child: h(10010, new Container(
         decoration: new BoxDecoration(
           backgroundColor: theme.cardBackgroundColor,
           border: new Border(bottom: new BorderSide(color: theme.dividerColor))
         ),
-        child: new Column(
+        child: h(10011, new Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            new SizedBox(
+            h(10012, new SizedBox(
               height: unitSize,
-              child: new Align(
+              child: h(10013, new Align(
                 alignment: FractionalOffset.topRight,
                 child: new FeaturePriceItem(product: product)
-              )
-            ),
-            new Flexible(
-              child: new CustomMultiChildLayout(
+              ))
+            )),
+            h(10014, new Flexible(
+              child: h(10015, new CustomMultiChildLayout(
                 delegate: new FeatureLayout(),
                 children: <Widget>[
-                  new LayoutId(
+                  h(10016, new LayoutId(
                     id: FeatureLayout.left,
-                    child: new ClipRect(
-                      child: new OverflowBox(
+                    child: h(10017, new ClipRect(
+                      child: h(10018, new OverflowBox(
                         minWidth: 340.0,
                         maxWidth: 340.0,
                         minHeight: 340.0,
                         maxHeight: 340.0,
                         alignment: FractionalOffset.topRight,
-                        child: new Image.asset(product.imageAsset, fit: ImageFit.cover)
-                      )
-                    )
-                  ),
-                  new LayoutId(
+                        child: h(10019, new Image.asset(product.imageAsset, fit: ImageFit.cover))
+                      ))
+                    ))
+                  )),
+                  h(10019, new LayoutId(
                     id: FeatureLayout.right,
-                    child: new Padding(
+                    child: h(10020, new Padding(
                       padding: const EdgeInsets.only(right: 16.0),
-                      child: new Column(
+                      child: h(10020, new Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          new Padding(
+                      h(10022, new Padding(
                             padding: const EdgeInsets.only(top: 18.0),
-                            child: new Text(product.featureTitle, style: theme.featureTitleStyle)
-                          ),
-                          new Padding(
+                            child: h(10023, new Text(product.featureTitle, style: theme.featureTitleStyle))
+                          )),
+                          h(10024, new Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: new Text(product.featureDescription, style: theme.featureStyle)
-                          ),
+                            child: h(10025, new Text(product.featureDescription, style: theme.featureStyle))
+                          )),
                           new VendorItem(vendor: product.vendor)
                         ]
-                      )
-                    )
-                  )
+                      ))
+                    ))
+                  ))
                 ]
-              )
-            )
+              ))
+            ))
           ]
-        )
-      )
-    );
+        ))
+      ))
+    ));
   }
 }
 
@@ -253,37 +253,37 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Card(
-      child: new Stack(
+    return h(10026, new Card(
+      child: h(10027, new Stack(
         children: <Widget>[
-          new Column(
+          h(10028, new Column(
             children: <Widget>[
-              new Align(
+              h(10029, new Align(
                 alignment: FractionalOffset.centerRight,
-                child: new ProductPriceItem(product: product)
-              ),
-              new Container(
+                child: h(10030, new ProductPriceItem(product: product))
+              )),
+              h(10031, new Container(
                 width: 144.0,
                 height: 144.0,
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: new Hero(
+                child: h(10032, new Hero(
                     tag: product.tag,
-                    child: new Image.asset(product.imageAsset, fit: ImageFit.contain)
-                  )
-                ),
-              new Padding(
+                    child: h(10033, new Image.asset(product.imageAsset, fit: ImageFit.contain))
+                  ))
+                )),
+              h(10033, new Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: new VendorItem(vendor: product.vendor)
-              )
+                child: h(10034, new VendorItem(vendor: product.vendor))
+              ))
             ]
-          ),
-          new Material(
+          )),
+          h(10035, new Material(
             type: MaterialType.transparency,
-            child: new InkWell(onTap: onPressed)
-          ),
+            child: h(10036, new InkWell(onTap: onPressed))
+          )),
         ]
-      )
-    );
+      ))
+    ));
   }
 }
 
@@ -304,11 +304,11 @@ class _ShrineHomeState extends State<ShrineHome> {
     final Order completedOrder = await Navigator.push(context, new ShrineOrderRoute(
       order: order,
       builder: (BuildContext context) {
-        return new OrderPage(
+        return h(10037, new OrderPage(
           order: order,
           products: _products,
           shoppingCart: _shoppingCart
-        );
+        ));
       }
     ));
     assert(completedOrder.product != null);
@@ -319,35 +319,35 @@ class _ShrineHomeState extends State<ShrineHome> {
   @override
   Widget build(BuildContext context) {
     final Product featured = _products.firstWhere((Product product) => product.featureDescription != null);
-    return new ShrinePage(
+    return h(10038, new ShrinePage(
       scaffoldKey: scaffoldKey,
       scrollableKey: scrollableKey,
       products: _products,
       shoppingCart: _shoppingCart,
-      body: new ScrollableViewport(
+      body: h(10039, new ScrollableViewport(
         scrollableKey: scrollableKey,
-        child: new RepaintBoundary(
-          child: new Column(
+        child: h(10040, new RepaintBoundary(
+          child: h(10041, new Column(
             children: <Widget>[
-              new FeatureItem(product: featured),
-              new Padding(
+              h(10042, new FeatureItem(product: featured)),
+              h(10043, new Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: new CustomGrid(
+                child: h(10044, new CustomGrid(
                   delegate: gridDelegate,
                   children: _products.map((Product product) {
-                    return new RepaintBoundary(
-                      child: new ProductItem(
+                    return h(10045, new RepaintBoundary(
+                      child: h(10046, new ProductItem(
                         product: product,
                         onPressed: () { showOrderPage(product); }
-                      )
-                    );
+                      ))
+                    ));
                   }).toList()
-                )
-              )
+                ))
+              ))
             ]
-          )
-        )
-      )
-    );
+          ))
+        ))
+      ))
+    ));
   }
 }

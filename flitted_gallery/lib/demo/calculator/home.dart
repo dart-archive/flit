@@ -115,27 +115,27 @@ class _CalculatorState extends State<Calculator> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return h(1000, new Scaffold(
+      appBar: h(1001, new AppBar(
         backgroundColor: Theme.of(context).canvasColor,
         elevation: 0
-      ),
-      body: new Column(
+      )),
+      body: h(1002, new Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           // Give the key-pad 3/5 of the vertical space and the display 2/5.
-          new Flexible(
+          h(1003, new Flexible(
             flex: 2,
-            child: new CalcDisplay(content: _expression.toString())
-          ),
-          new Divider(height: 1.0),
-          new Flexible(
+            child: h(1004, new CalcDisplay(content: _expression.toString()))
+          )),
+          h(1005, new Divider(height: 1.0)),
+          h(1006, new Flexible(
             flex: 3,
-            child: new KeyPad(calcState: this)
-          )
+            child: h(1007, new KeyPad(calcState: this))
+          ))
         ]
-      )
-    );
+      ))
+    ));
   }
 }
 
@@ -146,12 +146,12 @@ class CalcDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Center(
-      child: new Text(
+    return h(1008, new Center(
+      child: h(1009, new Text(
         content,
         style: const TextStyle(fontSize: 24.0)
-      )
-    );
+      ))
+    ));
   }
 }
 
@@ -167,59 +167,59 @@ class KeyPad extends StatelessWidget {
       brightness: Brightness.dark,
       platform: Theme.of(context).platform,
     );
-    return new Theme(
+    return h(1010, new Theme(
       data: themeData,
-      child: new Material(
-        child: new Row(
+      child: h(1011, new Material(
+        child: h(1012, new Row(
           children: <Widget>[
-            new Flexible(
+            h(1013, new Flexible(
               // We set flex equal to the number of columns so that the main keypad
               // and the op keypad have sizes proportional to their number of
               // columns.
               flex: 3,
-              child: new Column(
+              child: h(1014, new Column(
                 children: <Widget>[
-                  new KeyRow(<Widget>[
-                    new NumberKey(7, calcState),
-                    new NumberKey(8, calcState),
-                    new NumberKey(9, calcState)
-                  ]),
-                  new KeyRow(<Widget>[
-                    new NumberKey(4, calcState),
-                    new NumberKey(5, calcState),
-                    new NumberKey(6, calcState)
-                  ]),
-                  new KeyRow(<Widget>[
-                    new NumberKey(1, calcState),
-                    new NumberKey(2, calcState),
-                    new NumberKey(3, calcState)
-                  ]),
-                  new KeyRow(<Widget>[
-                    new CalcKey('.', calcState.handlePointTap),
-                    new NumberKey(0, calcState),
-                    new CalcKey('=', calcState.handleEqualsTap),
-                  ])
+                  h(1015, new KeyRow(<Widget>[
+                    h(1016, new NumberKey(7, calcState)),
+                    h(1017, new NumberKey(8, calcState)),
+                    h(1018, new NumberKey(9, calcState))
+                  ])),
+                  h(1019, new KeyRow(<Widget>[
+                    h(1020, new NumberKey(4, calcState)),
+                    h(1021, new NumberKey(5, calcState)),
+                    h(1022, new NumberKey(6, calcState))
+                  ])),
+                  h(1023, new KeyRow(<Widget>[
+                    h(1024, new NumberKey(1, calcState)),
+                    h(1025, new NumberKey(2, calcState)),
+                    h(1026, new NumberKey(3, calcState))
+                  ])),
+                  h(1027, new KeyRow(<Widget>[
+                    h(1028, new CalcKey('.', calcState.handlePointTap)),
+                    h(1029, new NumberKey(0, calcState)),
+                    h(1030, new CalcKey('=', calcState.handleEqualsTap)),
+                  ]))
                 ]
-              )
-            ),
-            new Flexible(
-              child: new Material(
+              ))
+            )),
+            h(1031, new Flexible(
+              child: h(1032, new Material(
                 color: themeData.backgroundColor,
-                child: new Column(
+                child: h(1033, new Column(
                   children: <Widget>[
-                    new CalcKey('\u232B', calcState.handleDelTap),
-                    new CalcKey('\u00F7', calcState.handleDivTap),
-                    new CalcKey('\u00D7', calcState.handleMultTap),
-                    new CalcKey('-', calcState.handleMinusTap),
-                    new CalcKey('+', calcState.handlePlusTap)
+                    h(1034, new CalcKey('\u232B', calcState.handleDelTap)),
+                    h(1035, new CalcKey('\u00F7', calcState.handleDivTap)),
+                    h(1036, new CalcKey('\u00D7', calcState.handleMultTap)),
+                    h(1037, new CalcKey('-', calcState.handleMinusTap)),
+                    h(1038, new CalcKey('+', calcState.handlePlusTap))
                   ]
-                )
-              )
-            ),
+                ))
+              ))
+            )),
           ]
-        )
-      )
-    );
+        ))
+      ))
+    ));
   }
 }
 
@@ -230,12 +230,12 @@ class KeyRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Flexible(
-      child: new Row(
+    return h(1039, new Flexible(
+      child: h(1040, new Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: this.keys
-      )
-    );
+      ))
+    ));
   }
 }
 
@@ -248,19 +248,19 @@ class CalcKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Orientation orientation = MediaQuery.of(context).orientation;
-    return new Flexible(
-      child: new InkResponse(
+    return h(1041, new Flexible(
+      child: h(1042, new InkResponse(
         onTap: this.onTap,
-        child: new Center(
-          child: new Text(
+        child: h(1043, new Center(
+          child: h(1044, new Text(
             this.text,
             style: new TextStyle(
               fontSize: (orientation == Orientation.portrait) ? 32.0 : 24.0
             )
-          )
-        )
-      )
-    );
+          ))
+        ))
+      ))
+    ));
   }
 }
 
