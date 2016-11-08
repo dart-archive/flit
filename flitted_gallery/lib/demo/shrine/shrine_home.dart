@@ -12,7 +12,7 @@ import 'shrine_page.dart';
 import 'shrine_theme.dart';
 import 'shrine_types.dart';
 
-import '../../diagnostics.dart';
+import 'package:flutter_gallery/diagnostics/diagnostics.dart';
 
 
 const double unitSize = kToolbarHeight;
@@ -73,19 +73,29 @@ class VendorItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return h(10000, new SizedBox(
-      height: 24.0,
+        ctorLocation: "shine_home.dart:77",
+        height: 24.0,
       child: h(10001, new Row(
+          ctorLocation: "shine_home.dart:78",
         children: <Widget>[
           new SizedBox(
-            width: 24.0,
+              ctorLocation: "shine_home.dart:82",
+              width: 24.0,
             child: h(10002, new ClipRRect(
-              borderRadius: new BorderRadius.circular(12.0),
+                ctorLocation: "shine_home.dart:84",
+                borderRadius: new BorderRadius.circular(12.0),
               child: h(10003, new Image.asset(vendor.avatarAsset, fit: ImageFit.cover))
             ))
           ),
-          h(10004, new SizedBox(width: 8.0)),
+          h(10004, new SizedBox(
+              ctorLocation: "shine_home.dart:90",
+              width: 8.0)),
           h(10005, new Flexible(
-            child: h(10006, new Text(vendor.name, style: ShrineTheme.of(context).vendorItemStyle))
+              ctorLocation: "shine_home.dart:93",
+            child: h(10006, new Text(
+                vendor.name,
+                style: ShrineTheme.of(context).vendorItemStyle,
+            ctorLocation: "shine_home.dart:95",))
           ))
         ]
       ))
@@ -244,7 +254,8 @@ class FeatureItem extends StatelessWidget {
 
 /// A card that displays a product's image, price, and vendor.
 class ProductItem extends StatelessWidget {
-  ProductItem({ Key key, this.product, this.onPressed }) : super(key: key) {
+  ProductItem({ Key key, this.product, this.onPressed, sourceLocation}) :
+        super(key: key, ctorLocation: sourceLocation) {
     assert(product != null);
   }
 

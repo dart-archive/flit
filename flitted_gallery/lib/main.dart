@@ -6,6 +6,9 @@ import 'package:flutter/widgets.dart';
 
 import 'gallery/app.dart';
 
+import 'diagnostics/diagnostics.dart';
+
 void main() {
+  diagnosticsStart();
   runApp(new GalleryApp());
 }

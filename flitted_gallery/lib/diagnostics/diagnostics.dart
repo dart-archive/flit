@@ -1,17 +1,23 @@
+// Copyright 2016 the Dart project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file.
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'visiting.dart';
 
 /// [globalState] must be initialized on startup by the application
 /// so that [updateHighlightIds] can refresh the current view
 State globalState;
 
-List<int> highlightIds = [1];
+Set<int> highlightIds = new Set<int>();
 
 /// Update the highlight and refresh the view.
 Future<Null> updateHighlightIds(List<int> newValues) async {
   globalState.setState(() {
-    highlightIds = newValues;
+    highlightIds.clear();
+    highlightIds.addAll(newValues);
   });
 }
 
@@ -22,8 +28,7 @@ Future<Null> updateHighlightIds(List<int> newValues) async {
 Map<int, Map<String, Object>> originMap = {};
 
 registerWithOriginMap(id, widget) {
-  var st = StackTrace.current;
-  var location = _extractHLocation(st);
+  var location = new SourceLocation("/dummy.dart", 0, 0);
 
   // serialize and send originMap over wire to laptop
   // using the VM service protocol
@@ -36,10 +41,14 @@ registerWithOriginMap(id, widget) {
 }
 
 Widget h(id, Widget w) {
+  Stopwatch sw = new Stopwatch()..start();
   registerWithOriginMap(id, w);
-  if (!highlightIds.contains(id)) return w;
-  return new CustomPaint(child: w, foregroundPainter: new HighlightPainter());
-//  return new CustomPaint(child: w, foregroundPainter: new HighlightPainter());
+  String widgetName = w.runtimeType.toString();
+  if (highlightIds.contains(id)) {
+    w = new CustomPaint(child: w, foregroundPainter: new HighlightPainter());
+  }
+  print ("${sw.elapsedMilliseconds} Widget: $id $widgetName");
+  return w;
 }
 
 class HighlightPainter extends CustomPainter {
@@ -65,23 +74,6 @@ class HighlightPainter extends CustomPainter {
   }
 }
 
-// There doesn't seem to be a way of programmatically manipulating the stack
-// trace objects so we fall back to string manipulation
-SourceLocation _extractHLocation(StackTrace st) {
-
-  List<String> lines = st.toString().split("\n");
-  String diagnosticsCallsite = lines[2].trim();
-  String locationBlock = diagnosticsCallsite.split(" ").last;
-  locationBlock = locationBlock.substring(1); // Strip leading '('
-  List<String> segmentSplit = locationBlock.split(":");
-
-  String path = segmentSplit[0];
-  int line = int.parse(segmentSplit[1]);
-  int char = int.parse(segmentSplit[2].split(")").first);
-
-  return new SourceLocation(path, line, char);
-}
-
 class SourceLocation {
   final String path;
   final int line;
@@ -89,4 +81,17 @@ class SourceLocation {
 
   const SourceLocation(this.path, this.line, this.char);
   toString() => "$path:$line:$char";
+}
+
+/**
+ * Placeholder method to repeatedly extract the annotated tree
+ */
+Timer t;
+diagnosticsStart() {
+  print ("Diagnostics start");
+
+  t = new Timer.periodic(new Duration(seconds: 1),(_) async {
+    print ("tick");
+    await debugReturnWidgetTreeAnnotated({});
+  });
 }
