@@ -51,19 +51,19 @@ class _FlutterDemoState extends State<FlutterDemo> {
   Widget build(BuildContext context) {
     var tree = h(0, new Scaffold(
       appBar: h(1, new AppBar(
-        title: h(2, new Text('Flutter Demo')),
+              title: h(2, new Text('Flutter Demo', ctorLocation: 'myApp.dart 54:26')), ctorLocation: 'myApp.dart 53:19'),
 
-      )),
+                ),
       body: h(3, new Center(
-        child: h(4, new Text("${computeText()}")),
+              child: h(4, new Text("${computeText()}", ctorLocation: 'myApp.dart 58:26')),
 //        child: h(4, new Text("test")),
-      )),
+              ctorLocation: 'myApp.dart 57:17')),
       floatingActionButton: h(5, new FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: h(6, new Icon(Icons.add)),
-      )),
-    ));
+        child: h(6, new Icon(Icons.add, ctorLocation: 'myApp.dart 64:23')),
+        ctorLocation: 'myApp.dart 61:33')),
+      ctorLocation: 'myApp.dart 52:20'));
     return tree;
   }
 }

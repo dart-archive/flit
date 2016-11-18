@@ -12,6 +12,7 @@ import 'package:flutter_tools/src/base/logger.dart';
 import 'package:flutter_tools/src/globals.dart';
 import 'package:flutter_tools/src/hot.dart';
 import 'package:flutter_tools/src/resident_runner.dart';
+import 'package:flutter_tools/src/devfs.dart';
 import 'package:path/path.dart' as path;
 import 'package:vm_service_client/vm_service_client.dart';
 
@@ -29,9 +30,12 @@ main(List<String> args) async {
   Cache.flutterRoot = path.normalize(path.absolute(flutterRoot));
   context[Logger] = new StdoutLogger();
   context[DeviceManager] = new DeviceManager();
-  Doctor.initGlobal();
+  context[DevFSConfig] = new DevFSConfig();
+  context[Doctor] = new Doctor();
+  context[HotRunnerConfig] = new HotRunnerConfig();
 
   List<Device> allDevices = await deviceManager.getAllConnectedDevices();
+  assert(allDevices.length > 0);
 
   DebuggingOptions debugOptions = new DebuggingOptions.enabled(
     BuildMode.debug,
