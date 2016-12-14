@@ -22,7 +22,16 @@ class ClassWithCtor extends SubClass {
   }
 }
 
+@Traced()
+abstract class ConstBaseClass {
+  final int theAnswer;
+  const ConstBaseClass(this.theAnswer);
+}
 
+class ConstSubClass extends ConstBaseClass {
+  final int anotherAnswer;
+  const ConstSubClass(this.anotherAnswer) : super(42);
+}
 
 class Traced {
   const Traced();

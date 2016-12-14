@@ -12,5 +12,9 @@ main() {
   var classWithCtor = new ClassWithCtor(aMessage: "A message");
   print (classWithCtor);
   classWithCtor.printMe();
+
+  var constTarget = new ConstSubClass(42);
+  print (constTarget);
+
 }
 
