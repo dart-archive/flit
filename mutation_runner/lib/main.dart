@@ -6,16 +6,23 @@ import 'dart:io' as io;
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:file/local.dart';
 import 'package:flutter_tools/src/base/common.dart';
+import 'package:flutter_tools/src/base/context.dart';
+import 'package:flutter_tools/src/base/file_system.dart';
+import 'package:flutter_tools/src/base/logger.dart';
+import 'package:flutter_tools/src/base/os.dart';
+import 'package:flutter_tools/src/base/process_manager.dart';
 import 'package:flutter_tools/src/build_info.dart';
 import 'package:flutter_tools/src/cache.dart';
 import 'package:flutter_tools/src/device.dart';
 import 'package:flutter_tools/src/doctor.dart';
-import 'package:flutter_tools/src/base/context.dart';
-import 'package:flutter_tools/src/base/logger.dart';
-import 'package:flutter_tools/src/globals.dart';
 import 'package:flutter_tools/src/hot.dart';
+import 'package:flutter_tools/src/ios/mac.dart';
+import 'package:flutter_tools/src/ios/simulators.dart';
 import 'package:flutter_tools/src/resident_runner.dart';
+import 'package:flutter_tools/src/toolchain.dart';
+import 'package:flutter_tools/src/usage.dart';
 import 'package:path/path.dart' as path;
 import 'package:vm_service_client/vm_service_client.dart';
 
@@ -23,7 +30,15 @@ import 'package:vm_service_client/vm_service_client.dart';
 const DIAGNOSTICS_PATH = '/lib/diagnostics.dart';
 
 main(List<String> args) async {
-  String flutterRoot = '../../GitRepos/flutter';
+  new AppContext().runInZone(_runInZone, onError: (e, s) {
+    print('============================');
+    print(e);
+    print(s);
+  });
+}
+
+_runInZone() async {
+  String flutterRoot = '../../flutter';
   String target = "lib/myapp.dart";
   String route = "/";
   String diagPath = "lib/diagnostics.dart";
@@ -31,9 +46,19 @@ main(List<String> args) async {
 
   // Initialize globals.
   Cache.flutterRoot = path.normalize(path.absolute(flutterRoot));
-  context[Logger] = new StdoutLogger();
-  context[DeviceManager] = new DeviceManager();
-  Doctor.initGlobal();
+  context.setVariable(Cache, new Cache());
+  context.setVariable(DeviceManager, new DeviceManager());
+  context.setVariable(FileSystem, new LocalFileSystem());
+  context.setVariable(HotRunnerConfig, new HotRunnerConfig());
+  context.setVariable(IOSSimulatorUtils, new IOSSimulatorUtils());
+  context.setVariable(Logger, new StdoutLogger());
+  context.setVariable(OperatingSystemUtils, new OperatingSystemUtils());
+  context.setVariable(ProcessManager, new ProcessManager());
+  context.setVariable(SimControl, new SimControl());
+  context.setVariable(ToolConfiguration, new ToolConfiguration());
+  context.setVariable(Usage, new Usage());
+  context.setVariable(XCode, new XCode());
+  context.setVariable(Doctor, new Doctor());
 
   List<Device> allDevices = await deviceManager.getAllConnectedDevices();
 
@@ -60,9 +85,15 @@ main(List<String> args) async {
 
   // Wait for application to start and VM service to connect
   DebugConnectionInfo debugInfo = await debugInfoCompleter.future;
-  VMServiceClient vmClient =
-      new VMServiceClient.connect('http://127.0.0.1:${debugInfo.port}');
-  VMIsolateRef isolateRef = await vmClient.onIsolateStart.first;
+  VMServiceClient vmClient = new VMServiceClient.connect(debugInfo.wsUri);
+  var vm = await vmClient.getVM();
+  var isolates = vm.isolates;
+  VMIsolateRef isolateRef;
+  if (isolates.isNotEmpty) {
+    isolateRef = isolates[0];
+  } else {
+    isolateRef = await vmClient.onIsolateStart.first;
+  }
 
   await setHighlights(isolateRef, []);
 
@@ -70,13 +101,17 @@ main(List<String> args) async {
 
   var requestServer =
     await io.HttpServer.bind(io.InternetAddress.LOOPBACK_IP_V4, SERVER_PORT);
-  print('listening on localhost, port ${requestServer.port}');
+  print(
+    '\n==============================='
+    '\nlistening on localhost, port ${requestServer.port}'
+    '\n===============================');
 
   await for (io.HttpRequest request in requestServer) {
     addCorsHeaders(request.response);
     print ("${request.method} ${request.uri.path}");
 
-    switch (request.uri.path) {
+    Uri uri = request.uri;
+    switch (uri.path) {
       case "/getIds":
         Map idMap = await getIds(isolateRef);
         Map jsonSafeMap = {};
@@ -87,9 +122,13 @@ main(List<String> args) async {
         request.response..write(await JSON.encode(jsonSafeMap))..close();
         break;
       case "/setHighlights":
-        String requestBody = await request.transform(UTF8.decoder).join();
-        print ("Setting Highlights: $requestBody");
-        List ids = JSON.decode(requestBody);
+        var text = uri.queryParameters['h'];
+        if (text == null) {
+          text = await request.transform(UTF8.decoder).join();
+        }
+        print ("Setting Highlights: $text");
+        var json = JSON.decode(text);
+        List ids = json is int ? [json] : json;
         setHighlights(isolateRef, ids);
         request.response..writeln("Done")..close();
         break;
@@ -107,7 +146,12 @@ setHighlights(VMIsolateRef isolateRef, List<int> highlightIds) async {
   List existinghighlightIds = await loadRef(highlightIdsField);
 
   // Delay before printing to prevent text collision in console
-  print('originMap = $originMap}');
+  print('originMap = ');
+  var keys = originMap.keys.toList()..sort();
+  for (var k in keys) {
+    print('  $k : ${originMap[k]}');
+  }
+  print('}');
   print('highlightIds = $existinghighlightIds');
 
   await updateHighlightIds(highlightIdsField, highlightIds);
