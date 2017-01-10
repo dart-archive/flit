@@ -71,7 +71,6 @@ class HighlightPainter extends CustomPainter {
 // There doesn't seem to be a way of programmatically manipulating the stack
 // trace objects so we fall back to string manipulation
 SourceLocation _extractHLocation(StackTrace st) {
-
   List<String> lines = st.toString().split("\n");
   String diagnosticsCallsite = lines[2].trim();
   String locationBlock = diagnosticsCallsite.split(" ").last;
