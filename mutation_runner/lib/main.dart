@@ -110,6 +110,8 @@ _runInZone() async {
   print(
     '\n==============================='
     '\nlistening on localhost, port ${requestServer.port}'
+    '\n   http://127.0.0.1:${requestServer.port}/getIds'
+    '\n   http://127.0.0.1:${requestServer.port}/setHighlights?h=4'
     '\n===============================');
 
   await for (io.HttpRequest request in requestServer) {
