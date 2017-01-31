@@ -208,18 +208,20 @@ Future<dynamic> loadRef(VMObjectRef ref) async {
     return map;
   }
   if (obj is VMField) return loadRef(obj.value);
-  return obj.runtimeType;
+  print('Unknown ref, returning String instead: "$obj"');
+  return '$obj';
 }
 
 /// Update the highlightIds and pull new values from the Flutter app
 Future<List> updateHighlightIds(VMFieldRef fieldRef, List newValues) async {
   String expression = 'updateHighlightIds([${newValues.join(',')}]);';
+
   print('Evaluating: $expression');
   VMLibraryRef libRef = fieldRef.owner;
-  VMInstanceRef result = await libRef.evaluate(expression);
-  List remoteValues = await loadRef(result);
-  print('   = ${remoteValues}');
-  remoteValues = await loadRef(fieldRef);
+  var result = await libRef.evaluate(expression);
+  var loadResult = await loadRef(result);
+  print('   = ${loadResult}');
+  List remoteValues = await loadRef(fieldRef);
   print('   = ${remoteValues}');
   return remoteValues;
 }
