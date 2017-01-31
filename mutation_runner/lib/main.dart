@@ -17,13 +17,14 @@ import 'package:flutter_tools/src/build_info.dart';
 import 'package:flutter_tools/src/cache.dart';
 import 'package:flutter_tools/src/device.dart';
 import 'package:flutter_tools/src/doctor.dart';
-import 'package:flutter_tools/src/hot.dart';
+import 'package:flutter_tools/src/run_hot.dart';
 import 'package:flutter_tools/src/ios/mac.dart';
 import 'package:flutter_tools/src/ios/simulators.dart';
 import 'package:flutter_tools/src/resident_runner.dart';
 import 'package:flutter_tools/src/toolchain.dart';
 import 'package:flutter_tools/src/usage.dart';
 import 'package:path/path.dart' as path;
+import 'package:process/process.dart';
 import 'package:vm_service_client/vm_service_client.dart';
 
 
@@ -53,7 +54,7 @@ _runInZone() async {
   context.setVariable(IOSSimulatorUtils, new IOSSimulatorUtils());
   context.setVariable(Logger, new StdoutLogger());
   context.setVariable(OperatingSystemUtils, new OperatingSystemUtils());
-  context.setVariable(ProcessManager, new ProcessManager());
+  context.setVariable(ProcessManager, new LocalProcessManager());
   context.setVariable(SimControl, new SimControl());
   context.setVariable(ToolConfiguration, new ToolConfiguration());
   context.setVariable(Usage, new Usage());
