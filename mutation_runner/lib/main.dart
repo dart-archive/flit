@@ -12,18 +12,19 @@ import 'package:flutter_tools/src/base/context.dart';
 import 'package:flutter_tools/src/base/file_system.dart';
 import 'package:flutter_tools/src/base/logger.dart';
 import 'package:flutter_tools/src/base/os.dart';
-import 'package:flutter_tools/src/base/process_manager.dart';
 import 'package:flutter_tools/src/build_info.dart';
 import 'package:flutter_tools/src/cache.dart';
 import 'package:flutter_tools/src/device.dart';
 import 'package:flutter_tools/src/doctor.dart';
-import 'package:flutter_tools/src/hot.dart';
+import 'package:flutter_tools/src/run_hot.dart';
 import 'package:flutter_tools/src/ios/mac.dart';
 import 'package:flutter_tools/src/ios/simulators.dart';
 import 'package:flutter_tools/src/resident_runner.dart';
 import 'package:flutter_tools/src/toolchain.dart';
 import 'package:flutter_tools/src/usage.dart';
 import 'package:path/path.dart' as path;
+import 'package:platform/platform.dart';
+import 'package:process/process.dart';
 import 'package:vm_service_client/vm_service_client.dart';
 
 
@@ -46,14 +47,19 @@ _runInZone() async {
 
   // Initialize globals.
   Cache.flutterRoot = path.normalize(path.absolute(flutterRoot));
+
+  // Seed these context entries first since others depend on them
+  context.putIfAbsent(Platform, () => new LocalPlatform());
+  context.setVariable(FileSystem, new LocalFileSystem());
+  context.setVariable(ProcessManager, new LocalProcessManager());
+  context.setVariable(Logger, new StdoutLogger());
+
+  // Order-independent context entries
   context.setVariable(Cache, new Cache());
   context.setVariable(DeviceManager, new DeviceManager());
-  context.setVariable(FileSystem, new LocalFileSystem());
   context.setVariable(HotRunnerConfig, new HotRunnerConfig());
   context.setVariable(IOSSimulatorUtils, new IOSSimulatorUtils());
-  context.setVariable(Logger, new StdoutLogger());
   context.setVariable(OperatingSystemUtils, new OperatingSystemUtils());
-  context.setVariable(ProcessManager, new ProcessManager());
   context.setVariable(SimControl, new SimControl());
   context.setVariable(ToolConfiguration, new ToolConfiguration());
   context.setVariable(Usage, new Usage());
@@ -104,6 +110,8 @@ _runInZone() async {
   print(
     '\n==============================='
     '\nlistening on localhost, port ${requestServer.port}'
+    '\n   http://127.0.0.1:${requestServer.port}/getIds'
+    '\n   http://127.0.0.1:${requestServer.port}/setHighlights?h=4'
     '\n===============================');
 
   await for (io.HttpRequest request in requestServer) {
@@ -202,18 +210,20 @@ Future<dynamic> loadRef(VMObjectRef ref) async {
     return map;
   }
   if (obj is VMField) return loadRef(obj.value);
-  return obj.runtimeType;
+  print('Unknown ref, returning String instead: "$obj"');
+  return '$obj';
 }
 
 /// Update the highlightIds and pull new values from the Flutter app
 Future<List> updateHighlightIds(VMFieldRef fieldRef, List newValues) async {
   String expression = 'updateHighlightIds([${newValues.join(',')}]);';
+
   print('Evaluating: $expression');
   VMLibraryRef libRef = fieldRef.owner;
-  VMInstanceRef result = await libRef.evaluate(expression);
-  List remoteValues = await loadRef(result);
-  print('   = ${remoteValues}');
-  remoteValues = await loadRef(fieldRef);
+  var result = await libRef.evaluate(expression);
+  var loadResult = await loadRef(result);
+  print('   = ${loadResult}');
+  List remoteValues = await loadRef(fieldRef);
   print('   = ${remoteValues}');
   return remoteValues;
 }

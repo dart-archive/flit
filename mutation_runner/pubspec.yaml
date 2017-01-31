@@ -1,6 +1,7 @@
 name: mutation_runner
 description: A new flutter project.
 dependencies:
+  process: any
   shelf: any
   shelf_static: any
   shelf_route: any
@@ -12,3 +13,6 @@ dependencies:
      path: ../../flutter/packages/flutter/
 
   vm_service_lib: any
+
+flutter:
+  uses-material-design: true
