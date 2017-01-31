@@ -13,3 +13,6 @@ dependencies:
      path: ../../flutter/packages/flutter/
 
   vm_service_lib: any
+
+flutter:
+  uses-material-design: true
