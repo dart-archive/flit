@@ -53,19 +53,19 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
   @override
   Widget build(BuildContext context) {
-    var tree = h(0, new Scaffold(
-      appBar: h(1, new AppBar(
-        title: h(2, new Text('Flutter Demo')),
+    var tree = h(0, context, new Scaffold(
+      appBar: h(1, context, new AppBar(
+        title: h(2, context, new Text('Flutter Demo')),
 
       )),
-      body: h(3, new Center(
-        child: h(4, new Text("${computeText()}")),
-//        child: h(4, new Text("test")),
+      body: h(3, context, new Center(
+        child: h(4, context, new Text("${computeText()}")),
+//        child: h(4, context, new Text("test")),
       )),
-      floatingActionButton: h(5, new FloatingActionButton(
+      floatingActionButton: h(5, context, new FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: h(6, new Icon(Icons.add)),
+        child: h(6, context, new Icon(Icons.add)),
       )),
     ));
     return tree;
